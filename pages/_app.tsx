@@ -5,12 +5,12 @@ import type { AppProps } from 'next/app'
 import DefaultLayout from '@/layouts/DefaultLayout'
 
 
-function MyApp({ Component, pageProps }: AppProps) {
+function App({ Component, pageProps }: AppProps) {
   return (
-      <DefaultLayout>
+      <DefaultLayout title='default layout'>
         <Component {...pageProps} />
       </DefaultLayout>
   )
 }
 
-export default MyApp
+export default App

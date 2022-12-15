@@ -1,8 +1,9 @@
 import { SidebarMenu } from '@/useComponents/SidebarMenu';
 import { Navbar } from '@/useComponents/Navbar';
 import Head from 'next/head'
+import { Component } from './type';
 
-const DefaultLayout = ({ children }: any) => {
+const DefaultLayout = ({ children }: Component) => {
   const menu = [
     {
       name: 'Solicitação de Compra',
@@ -27,8 +28,8 @@ const DefaultLayout = ({ children }: any) => {
   return (
     <div className="font-mono">
       <Head>
-        <title>Create Next App</title>
-        <meta name="description" content="" />
+        <title>Default Layout</title>
+        <meta name="description" content="Default Layout" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className='h-screen flex justify-center items-center'>

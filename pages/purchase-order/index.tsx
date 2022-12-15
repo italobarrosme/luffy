@@ -1,18 +1,18 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
 
-const Home: NextPage = () => {
+const PurchaseOrder: NextPage = () => {
   return (
     <>
       <Head>
-        <title>HOME</title>
+        <title>Solicitação de Compra</title>
         <meta name="keywords" content="games" />
       </Head>
       <div className="flex justify-center items-center h-44">
-        HOME
+      Solicitação de Compra
       </div>
     </>
   )
 }
 
-export default Home
+export default PurchaseOrder
