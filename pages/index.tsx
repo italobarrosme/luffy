@@ -9,8 +9,12 @@ const Home: NextPage = () => {
   const router = useRouter();
 
   useEffect(() => {
-    session ? router.push('/dashboard') : router.push('/auth');
-  }, []);
+    if (status === 'authenticated') {
+      router.push('/purchase-order')
+    } else {
+      router.push('/auth')
+    }
+  }, [status])
 
   return (
     <>
