@@ -1,16 +1,19 @@
 import type { NextPage } from 'next'
-import Head from 'next/head'
+
+import { useRouter } from 'next/router'
+import { useEffect } from 'react'
+import { useSession } from 'next-auth/react'
 
 const Home: NextPage = () => {
+  const { data: session, status } = useSession();
+  const router = useRouter();
+
+  useEffect(() => {
+    session ? router.push('/dashboard') : router.push('/auth');
+  }, []);
+
   return (
     <>
-      <Head>
-        <title>HOME</title>
-        <meta name="keywords" content="games" />
-      </Head>
-      <div className="flex justify-center items-center h-44">
-        HOME
-      </div>
     </>
   )
 }

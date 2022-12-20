@@ -3,7 +3,12 @@ import { Navbar } from '@/useComponents/Navbar';
 import Head from 'next/head'
 import { Component } from './type';
 
+import { signOut } from 'next-auth/react'
+
 const DefaultLayout = ({ children }: Component) => {
+  
+  
+
   const menu = [
     {
       name: 'Solicitação de Compra',
@@ -15,7 +20,9 @@ const DefaultLayout = ({ children }: Component) => {
   const navItems = [
     {
       name: 'logout',
-      fn: () => {},
+      fn: () => (
+        signOut({ redirect: true, callbackUrl: '/auth'})
+      ),
       icon: 'mdi:logout'
     },
     {
