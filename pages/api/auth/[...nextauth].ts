@@ -39,7 +39,7 @@ export default NextAuth({
           throw new Error(data.error);
         }
 
-        return data.user;
+        return data;
         
       },
     }),
@@ -47,14 +47,20 @@ export default NextAuth({
   secret: process.env.JWT_SECRET,
   pages: {
     signIn: '/auth',
+    error: '/auth',
   },
   callbacks: {
     async jwt({ token, user, account }: any) {
+      console.log(token, 'token')
+      console.log(user, 'user')
+      console.log(account, 'account')
+
       if (account && user) {
         return {
           ...token,
-          accessToken: user.token,
-          refreshToken: user.refreshToken,
+          accessToken: user.SessionId,
+          sessionTimeout: user.SessionTimeout,
+          version: user.Version,
         };
       }
       return token;
@@ -62,8 +68,8 @@ export default NextAuth({
 
     async session({ session, token }: any) {
       session.accessToken = token.accessToken;
-      session.refreshToken = token.refreshToken;
-      session.accessTokenExpires = token.accessTokenExpires;
+      session.sessionTimeout = token.sessionTimeout;
+      session.version = token.version;
 
       return session;
     },

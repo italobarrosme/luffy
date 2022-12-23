@@ -1,3 +1,12 @@
+import https from 'https'
+
+if (process.env.NODE_ENV === 'development') {
+  const httpsAgent = new https.Agent({
+    rejectUnauthorized: false,
+  })
+  axios.defaults.httpsAgent = httpsAgent
+}
+
 import axios, {
   AxiosRequestConfig,
   AxiosRequestHeaders,
@@ -12,6 +21,7 @@ type FetchParams = {
   data?: BodyInit | JSON | Record<string, unknown>
   params?: unknown
   method?: AxiosRequestConfig['method']
+  httpsAgent?: AxiosRequestConfig['httpsAgent']
 }
 
 export function fetch({
@@ -19,7 +29,6 @@ export function fetch({
   method = 'GET',
   url = `${process.env.API_URL || ''}`,
   path,
-  
   ...data
 }: FetchParams): Promise<AxiosResponse> {
   const axiosInstance = axios.create()

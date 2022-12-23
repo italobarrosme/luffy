@@ -3,11 +3,9 @@ import type { NextApiRequest, NextApiResponse } from 'next'
 import { fetch } from '@/services/axios'
 
 type Data = {
-  user:{ 
     ['Version']: string,
     SessionId: string,
     SessionTimeout: number,
-  }
 }
 
 
@@ -16,12 +14,13 @@ export default function handler(
   res: NextApiResponse<Data>
 ) {
 
-  const { user, pass } = req.body
+  const useFetch = async () => {
+    const { user, pass } = req.body
 
   console.log(user, 'user')
   console.log(pass, 'password')
 
-  const response = fetch({
+  const response = await fetch({
     method: 'POST',
     path: '/Login',
     data: {
@@ -33,7 +32,19 @@ export default function handler(
     },
   })
 
-  console.log(response)
+  if (response.data.error) {
+    throw new Error(response.data.error);
+  }
+
+  res.status(200).json(response.data)
+}
+
+useFetch()
+
+
+
+
+
 
 
 

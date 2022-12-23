@@ -43,7 +43,7 @@ const DefaultLayout = ({ children }: Component) => {
       </Head>
       <Navbar menu={navItems}/>
       <SidebarMenu menu={menu} />
-      <main className='h-screen justify-center w-full items-center'>
+      <main className='h-screen justify-center w-full items-center py-12'>
         {children}
       </main>
 
