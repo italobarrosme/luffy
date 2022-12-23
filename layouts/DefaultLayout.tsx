@@ -13,7 +13,7 @@ const DefaultLayout = ({ children }: Component) => {
   const menu = [
     {
       name: 'Solicitação de Compra',
-      link: '/about',
+      link: '/purchase-order',
       icon: 'mdi:cart'
     }
   ]
@@ -35,17 +35,17 @@ const DefaultLayout = ({ children }: Component) => {
   ]
 
   return (
-    <div className="font-mono">
+    <div className="font-mono flex w-screen">
       <Head>
         <title>Default Layout</title>
         <meta name="description" content="Default Layout" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className='h-screen flex justify-center items-center'>
+      <Navbar menu={navItems}/>
+      <SidebarMenu menu={menu} />
+      <main className='h-screen justify-center w-full items-center'>
         {children}
       </main>
-      <SidebarMenu menu={menu} />
-      <Navbar menu={navItems}/>
 
     </div>
   )

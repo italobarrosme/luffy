@@ -37,7 +37,7 @@ export const SidebarMenu = ({menu}: SidebarMenuProps) => {
 
 
   return (
-    <div className={clsx('ease-out duration-100', sidebar ? 'w-52 absolute top-0 h-screen bg-brand-primary rounded-tr-lg rounded-br-lg' : 'w-20 absolute top-0 h-screen bg-brand-primary rounded-tr-lg rounded-br-lg')}>
+    <div className={clsx('ease-out duration-100', sidebar ? 'w-52 relative top-0 h-screen bg-brand-primary rounded-tr-lg rounded-br-lg' : 'w-20 relative top-0 h-screen bg-brand-primary rounded-tr-lg rounded-br-lg')}>
       <div className='flex items-center'>
         <button className='p-4 text-brand-light' onClick={toggleBar}>
           <Icon icon="mdi:menu" width={32}/>

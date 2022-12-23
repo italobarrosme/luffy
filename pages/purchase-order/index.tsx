@@ -1,6 +1,7 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
 import DefaultLayout from '@/layouts/DefaultLayout'
+import { PurchaseOrderCase } from '@/useCases/purchaseOrderCase'
 
 const PurchaseOrder: NextPage = () => {
   return (
@@ -11,9 +12,9 @@ const PurchaseOrder: NextPage = () => {
         <meta name="keywords" content="games" />
       </Head>
       <DefaultLayout title='default layout'>
-        <div className="flex justify-center items-center h-44">
-        Solicitação de Compra
-        </div>
+          <div className='h-screen mt-12 p-8'>
+            <PurchaseOrderCase />
+          </div>
       </DefaultLayout> 
     </>
   )

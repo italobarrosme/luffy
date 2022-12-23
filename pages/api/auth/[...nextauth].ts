@@ -4,8 +4,8 @@ import NextAuth from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 
 type credentialsProps = {
-  email: string;
-  password: string;
+  user: string;
+  pass: string;
 };
 
 export default NextAuth({
@@ -13,15 +13,14 @@ export default NextAuth({
     CredentialsProvider({
       name: 'credentials',
       credentials: {
-        email: {
-          label: 'email',
-          type: 'email',
-          placeholder: 'jsmith@example.com',
+        user: {
+          label: 'user',
+          type: 'text',
         },
-        password: { label: 'Password', type: 'password' }
+        pass: { label: 'Password', type: 'text' }
       },
       async authorize(credentials) {
-        const { email, password } = credentials as credentialsProps;
+        const { user, pass } = credentials as credentialsProps;
 
         const response = await fetch(`http://localhost:3000/api/login`, {
           method: 'POST',
@@ -29,8 +28,8 @@ export default NextAuth({
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            email,
-            password,
+            user,
+            pass,
           }),
         });
 

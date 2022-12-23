@@ -15,9 +15,11 @@ type FetchParams = {
 }
 
 export function fetch({
+  headers,
   method = 'GET',
-  url = `${process.env.APP_BASE_API || ''}`,
+  url = `${process.env.API_URL || ''}`,
   path,
+  
   ...data
 }: FetchParams): Promise<AxiosResponse> {
   const axiosInstance = axios.create()

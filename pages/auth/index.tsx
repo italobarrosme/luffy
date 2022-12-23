@@ -8,14 +8,14 @@ import { useRouter } from "next/router";
 interface Props {}
 
 const Auth: NextPage = (props): JSX.Element => {
-  const [userInfo, setUserInfo] = useState({ email: "", password: "" });
+  const [userInfo, setUserInfo] = useState({ user: "", password: "" });
   const handleSubmit: FormEventHandler<HTMLFormElement> = async (e) => {
 
     e.preventDefault();
 
     const res = await signIn("credentials", {
-      email: userInfo.email,
-      password: userInfo.password,
+      user: userInfo.user,
+      pass: userInfo.password,
     });
   };
   return (
@@ -37,12 +37,11 @@ const Auth: NextPage = (props): JSX.Element => {
             <input
               name="email"
               className="border-2 border-brand-dark p-2 rounded-md"
-              value={userInfo.email}
+              value={userInfo.user}
               onChange={({ target }) =>
-                setUserInfo({ ...userInfo, email: target.value })
+                setUserInfo({ ...userInfo, user: target.value })
               }
-              type="email"
-              placeholder="email@email.com"
+              type="text"
             />
           </div>
           <div className="flex gap-2 w-full justify-center items-center">
@@ -56,8 +55,7 @@ const Auth: NextPage = (props): JSX.Element => {
               onChange={({ target }) =>
                 setUserInfo({ ...userInfo, password: target.value })
               }
-              type="password"
-              placeholder="password"
+              type="text"
             />
           </div>
           <div className="flex gap-2 w-full justify-center items-center">
