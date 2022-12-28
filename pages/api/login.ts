@@ -36,17 +36,9 @@ export default function handler(
     throw new Error(response.data.error);
   }
 
-  res.status(200).json(response.data)
+  return res.status(200).json(response.data)
 }
 
 useFetch()
 
-
-
-
-
-
-
-
-  
 }

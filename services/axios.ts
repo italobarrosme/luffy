@@ -7,6 +7,10 @@ if (process.env.NODE_ENV === 'development') {
   axios.defaults.httpsAgent = httpsAgent
 }
 
+type headerCookie = {
+  Cookie: string
+}
+
 import axios, {
   AxiosRequestConfig,
   AxiosRequestHeaders,
@@ -17,16 +21,18 @@ type FetchParams = {
   url?: string
   path: string
   responseType?: AxiosRequestConfig['responseType']
-  headers?: AxiosRequestHeaders
+  headers?: AxiosRequestHeaders | headerCookie
   data?: BodyInit | JSON | Record<string, unknown>
   params?: unknown
   method?: AxiosRequestConfig['method']
   httpsAgent?: AxiosRequestConfig['httpsAgent']
+  withCredentials?: boolean
 }
 
 export function fetch({
   headers,
   method = 'GET',
+  withCredentials = true,
   url = `${process.env.API_URL || ''}`,
   path,
   ...data
@@ -35,6 +41,8 @@ export function fetch({
 
   return axiosInstance({
     ...data,
+    headers,
+    withCredentials,
     method,
     baseURL: url,
     url: path,

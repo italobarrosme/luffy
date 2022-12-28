@@ -1,5 +1,7 @@
 import { Pagination } from "@/useComponents/Pagination"
 import { Table } from "@/useComponents/Table"
+import { useEffect, useState } from "react"
+import { getPurchaseRequests } from "@/services/purchase-order/usePurchaseOrder"
 
 export const PurchaseOrderCase = () => {
 
@@ -30,18 +32,43 @@ export const PurchaseOrderCase = () => {
     },
   ]
 
+  const [purchaseRequests, setPurchaseRequests] = useState<any>([])
+
+  useEffect(() => {
+    const apiCall = async () => {
+      const response = await getPurchaseRequests()
+      setPurchaseRequests(response?.data.value)
+
+      return response
+    }
+
+    apiCall()
+    
+  }, [])
+
+  const adpterPurchaseRequests = purchaseRequests.map((purchaseRequest: any) => {
+    return {
+      cancelled: purchaseRequest?.Cancelled,
+      docentry: purchaseRequest?.DocEntry,
+      docnum: purchaseRequest?.DocNum,
+      documentStatus: purchaseRequest?.DocumentStatus,
+      requesterDepertment: purchaseRequest?.RequesterDepartment,
+      requesterName: purchaseRequest?.RequesterName,
+    }
+  })
+
 
   return (
     <>
       <Table title={'Solicitação de Compra'} headerItems={headers}>
-        {Array.from({length: 10}).map((_, index) => (
+        {adpterPurchaseRequests?.map((purchaseRequest: any, index: any) => (
           <tr key={index} className="border-b border-gray-200 bg-gray-300">
-            <td className="p-3 text-left">1</td>
-            <td className="p-3 text-left">2</td>
-            <td className="p-3 text-left">3</td>
-            <td className="p-3 text-left">4</td>
-            <td className="p-3 text-left">5</td>
-            <td className="p-3 text-left">6</td>
+            <td className="p-3 text-left">{purchaseRequest?.docnum}</td>
+            <td className="p-3 text-left">{purchaseRequest?.requesterName}</td>
+            <td className="p-3 text-left">{purchaseRequest?.requesterDepertment}</td>
+            <td className="p-3 text-left">{purchaseRequest?.docentry}</td>
+            <td className="p-3 text-left">{purchaseRequest?.documentStatus}</td>
+            <td className="p-3 text-left">{purchaseRequest?.cancelled}</td>
           </tr>
         ), [])}
       </Table>
