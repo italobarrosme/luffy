@@ -2,6 +2,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import NextAuth from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
+import { fetch } from '@/services/axios';
 
 type credentialsProps = {
   user: string;
@@ -22,26 +23,24 @@ export default NextAuth({
       async authorize(credentials) {
         const { user, pass } = credentials as credentialsProps;
 
-        const response = await fetch(`http://localhost:3000/api/login`, {
+        const response = await fetch({
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
+          path: 'http://localhost:3000/api/login',
+          data: {
             user,
             pass,
-          }),
+          }
         });
 
-        const data = await response.json();
-
-        if (data.error) {
-          throw new Error(data.error);
+        if (response.status === 200) {
+          return response.data;
         }
 
-        return data;
+        return response;
         
       },
+
+      
     }),
   ],
   secret: process.env.JWT_SECRET,
@@ -69,7 +68,8 @@ export default NextAuth({
 
       return session;
     },
-    async redirect({ baseUrl }: any) {
+    async redirect({baseUrl}: any) {
+
       return `${baseUrl}/api/auth/callback`
     },
   },

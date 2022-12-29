@@ -1,0 +1,15 @@
+.toastContainer {
+  @apply fixed z-50 transition-opacity;
+  &.top-right {
+    @apply top-4 right-4;
+  }
+  &.bottom-right {
+    @apply bottom-4 right-4;
+  }
+  &.top-left {
+    @apply top-4 left-4;
+  }
+  &.bottom-left {
+    @apply bottom-4 left-4;
+  }
+}

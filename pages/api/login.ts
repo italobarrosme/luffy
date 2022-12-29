@@ -11,34 +11,31 @@ type Data = {
 
 export default function handler(
   req: NextApiRequest,
-  res: NextApiResponse<Data>
+  res: NextApiResponse
 ) {
 
   const useFetch = async () => {
+    
     const { user, pass } = req.body
 
-  console.log(user, 'user')
-  console.log(pass, 'password')
+    const response = await fetch({
+      method: 'POST',
+      path: '/Login',
+      data: {
+        UserName: user,
+        Password: pass,
+        CompanyDB: 'SBOIPOGTESTE',
+        Language: 29
 
-  const response = await fetch({
-    method: 'POST',
-    path: '/Login',
-    data: {
-      UserName: user,
-      Password: pass,
-      CompanyDB: 'SBOIPOGTESTE',
-      Language: 29
+      },
+    })
 
-    },
-  })
+    return res.status(response.status).json(response.data)
 
-  if (response.data.error) {
-    throw new Error(response.data.error);
-  }
-
-  return res.status(200).json(response.data)
+    
+  
 }
 
-useFetch()
+ return useFetch()
 
 }

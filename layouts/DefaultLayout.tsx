@@ -2,11 +2,11 @@ import { SidebarMenu } from '@/useComponents/SidebarMenu';
 import { Navbar } from '@/useComponents/Navbar';
 import Head from 'next/head'
 import { Component } from './type';
-import {destroyCookie} from 'nookies'
+import { destroyCookie } from 'nookies'
 
 import { signOut } from 'next-auth/react'
 
-const DefaultLayout = ({ children }: Component) => {
+const DefaultLayout = ({ children }:Component) => {
   
   
 
@@ -22,8 +22,10 @@ const DefaultLayout = ({ children }: Component) => {
     {
       name: 'logout',
       fn: () => (
-        destroyCookie(null, '@ipog:accessToken'),
-        signOut({ redirect: true, callbackUrl: '/auth'})
+        signOut({ redirect: true, callbackUrl: '/auth'}),
+        destroyCookie(null, 'B1SESSION', {
+          path: '/',
+        })
       ),
       icon: 'mdi:logout'
     },

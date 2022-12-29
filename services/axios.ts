@@ -1,4 +1,11 @@
 import https from 'https'
+import axios, {
+  AxiosRequestConfig,
+  AxiosRequestHeaders,
+  AxiosResponse,
+} from 'axios'
+
+import { useStoreListToast } from '@/store/useStoreListToast'
 
 if (process.env.NODE_ENV === 'development') {
   const httpsAgent = new https.Agent({
@@ -11,11 +18,7 @@ type headerCookie = {
   Cookie: string
 }
 
-import axios, {
-  AxiosRequestConfig,
-  AxiosRequestHeaders,
-  AxiosResponse,
-} from 'axios'
+
 
 type FetchParams = {
   url?: string
@@ -29,6 +32,9 @@ type FetchParams = {
   withCredentials?: boolean
 }
 
+
+export const axiosInstance = axios.create()
+
 export function fetch({
   headers,
   method = 'GET',
@@ -37,7 +43,21 @@ export function fetch({
   path,
   ...data
 }: FetchParams): Promise<AxiosResponse> {
-  const axiosInstance = axios.create()
+
+
+  // axiosInstance.interceptors.response.use(
+  //   (response) => {
+  //     return response
+  //   },
+  //   (error) => {
+  //     return {
+  //       error: {
+  //         status: error.response?.status,
+  //         message: error.response?.statusText,
+  //       },
+  //     }
+  //   }
+  // )
 
   return axiosInstance({
     ...data,

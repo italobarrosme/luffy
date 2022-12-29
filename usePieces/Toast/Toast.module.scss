@@ -1,0 +1,59 @@
+.toast {
+  @apply bg-white shadow-md rounded-md text-left min-w-[320px] my-4;
+  animation-name: ToastAnimation !important;
+  animation-delay: 0ms !important;
+  &.success {
+    @apply p-4 bg-emerald-500; 
+  }
+  &.error {
+    @apply p-4 bg-red-400;
+  }
+  &.warning {
+    @apply p-4 bg-orange-400;
+  }
+  &.info {
+    @apply p-4 bg-blue-400;
+  }
+}
+
+.toastContent {
+  @apply flex justify-between;
+}
+
+.toastBtn {
+  @apply bg-transparent border-transparent hover:bg-transparent hover:border-transparent;
+}
+
+.toastHeader {
+  @apply flex flex items-center gap-2;
+}
+
+.toastTitle {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #fff;
+}
+
+.toastMessage {
+  font-size: 1rem;
+  color: #fff;
+}
+
+@keyframes ToastAnimation {
+  0% {
+    opacity: 0;
+    transform: translateX(-40px);
+  }
+  10% {
+    opacity: 1;
+    transform: translateX(0px);
+  }
+  80% {
+    opacity: 1;
+    transform: translateX(0px);
+  }
+  100% {
+    transform: translateX(-40px);
+    opacity: 0;
+  }
+}

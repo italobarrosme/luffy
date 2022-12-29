@@ -50,6 +50,9 @@
       "@/usePieces/*": [
         "usePieces/*"
       ],
+      "@/store/*": [
+        "store/*"
+      ],
       "@/ui/*": [
         "ui/*"
       ],
