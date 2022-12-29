@@ -10,11 +10,11 @@ export default async function handler(
   res: NextApiResponse
 ) {
   const session: SessionAndToken = await getSession({ req })
+
   if (session?.accessToken) {
     setCookie({ res }, 'B1SESSION', session.accessToken, {
-      path: '/b1s/v2',
-      HttpOnly: true,
-      Secure: true,
+      path: '/',
+      httpOnly: true,
     })
   }
 
