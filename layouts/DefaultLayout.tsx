@@ -25,6 +25,9 @@ const DefaultLayout = ({ children }:Component) => {
         signOut({ redirect: true, callbackUrl: '/auth'}),
         destroyCookie(null, 'B1SESSION', {
           path: '/',
+        }),
+        destroyCookie(null, 'SESSION_TIMEOUT',{
+          path: '/',
         })
       ),
       icon: 'mdi:logout'

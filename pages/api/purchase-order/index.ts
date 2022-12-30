@@ -13,12 +13,9 @@ export default function handler(
         Cookie: `B1SESSION=${req.cookies['B1SESSION']}`
       }
     })
-
-  if (response.data.error) {
-    return res.status(500).json(response.data)
-  }
+    
   
-  return res.status(200).json(response.data)
+  return res.status(response.status).json(response.data)
 }
   return usePurchaseRequestsFetch()
 }

@@ -16,10 +16,7 @@ const Home: NextPage = () => {
       router.push('/purchase-order')
     } else {
       router.push('/auth')
-    }
-
-    
-
+    } 
   }, [status])
 
   return (

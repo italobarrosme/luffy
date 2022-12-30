@@ -1,5 +1,7 @@
 import { Icon } from '@iconify/react'
 import { ReactNode } from 'react'
+import { InputSearch } from "@/usePieces/InputSearch"
+import { ChangeEvent } from 'react'
 
 export type itemsHeader = {
   title: string
@@ -10,12 +12,16 @@ export type TableProps = {
   title: string
   headerItems: itemsHeader[]
   children: ReactNode
+  onChangeSearch: (event: ChangeEvent<HTMLInputElement>) => void
 }
 
-export const Table = ({title, headerItems, children}: TableProps) => {
+export const Table = ({title, headerItems, children, onChangeSearch}: TableProps) => {
   return (
     <div className="w-full p-2 mx-auto sm:p-4">
-      <h2 className="mb-4 text-2xl font-semibold leading-tight">{title}</h2>
+      <div className='flex items-center mb-2 gap-4 justify-between'>
+        <h2 className="text-2xl font-semibold leading-tight">{title}</h2>
+        <InputSearch placeholder="Filtro" onChange={onChangeSearch}/>
+      </div>
       <div className="overflow-x-auto rounded-lg">
         <table className="text-xs w-full">
           <thead>

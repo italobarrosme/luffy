@@ -29,6 +29,8 @@ const Auth: NextPage = () => {
       })
     }
 
+    
+
   }, [query.error])
 
   

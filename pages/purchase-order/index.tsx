@@ -12,7 +12,7 @@ const PurchaseOrder: NextPage = () => {
         <meta name="keywords" content="games" />
       </Head>
       <DefaultLayout title='default layout'>
-          <div className='h-screen p-8'>
+          <div className='h-full p-4 overflow-y-auto'>
             <PurchaseOrderCase />
           </div>
       </DefaultLayout> 
