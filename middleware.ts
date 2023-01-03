@@ -4,8 +4,6 @@ import { NextRequest, NextResponse,  } from 'next/server'
 export default function middleware(req: NextRequest, res: NextResponse) {
   const cookie = req?.cookies.get('B1SESSION')
 
-  console.log(res, 'res')
-
   const { pathname } = req.nextUrl
 
   if (!cookie && pathname !== '/auth') {

@@ -2,18 +2,23 @@ import { Pagination } from "@/useComponents/Pagination"
 import { Table } from "@/useComponents/Table"
 import { useEffect, useState } from "react"
 import { getPurchaseRequests } from "@/services/purchase-order/usePurchaseOrder"
-import { useRouter } from "next/router"
+import { formatDepartament, formatStatus, formatCanceled } from '@/utils/formatData'
+
 import { useNoAuthorized } from "@/hooks/useNoAuthorized"
-import { Button } from "@/usePieces/Button"
+import { ButtonIcon } from "@/usePieces/ButtonIcon"
+import { useStoreListToast } from "@/store/useStoreListToast"
+import { useRouter } from "next/router"
 
 export const PurchaseOrderCase = () => {
 
+  const router = useRouter()
+
+  const { addToast } = useStoreListToast()
   const [currentPage, setCurrentPage] = useState(1)
   const [purchaseRequests, setPurchaseRequests] = useState<any>([])
 
-  const GET_PURCHASEREQUESTS = async () => {
-    await getPurchaseRequests().then((response) => {
-
+  const GET_PURCHASEREQUESTS = () => {
+    getPurchaseRequests().then((response) => {
       const adpterPurchaseRequests = response.data.value.map((purchaseRequest: any) => {
         return {
           cancelled: purchaseRequest?.Cancelled,
@@ -29,15 +34,19 @@ export const PurchaseOrderCase = () => {
       
       return response
     }).catch((error) => {
+      const { status: responseStatus, statusText } = error.response
 
-      const { status: responseStatus } = error.response
-      
+      addToast({
+        type: 'error',
+        title: `Error ${responseStatus}`,
+        message: `Erro ao buscar solicitações de compra, ${statusText}`,
+        duration: 8000
+      })
+
       useNoAuthorized(responseStatus)
     })
     
   }
-
-  const router = useRouter()
 
   const headers = [
     {
@@ -70,7 +79,6 @@ export const PurchaseOrderCase = () => {
     },
   ]
 
-  
 
   useEffect(() => {
     GET_PURCHASEREQUESTS()
@@ -101,10 +109,15 @@ export const PurchaseOrderCase = () => {
     }
   }
 
+  const handleInsertPurchaseRequest = () => {
+    router.push('/purchase-order/insert-purchase-order')
+  }
+
+
 
   return (
     <>
-      <Table title={'Solicitação de Compra'} headerItems={headers} onChangeSearch={onChangeSearch}>
+      <Table title={'Solicitação de Compra'} headerItems={headers} onChangeSearch={onChangeSearch} actionHeadButton={handleInsertPurchaseRequest} labelButtonHeader={'Inserir Solicitação'} >
         {purchaseRequests ? purchaseRequests?.map((purchaseRequest: any, index: any) => (
           <tr key={index} className="border-b border-gray-200 bg-gray-300">
             <td className="p-3 flex items-center gap-2">
@@ -114,19 +127,20 @@ export const PurchaseOrderCase = () => {
               {purchaseRequest?.requesterName}
             </td>
             <td className="p-3 text-left">
-              {purchaseRequest?.requesterDepertment}
+              {formatDepartament(purchaseRequest?.requesterDepertment)}
             </td>
             <td className="p-3 text-left">
               {purchaseRequest?.docentry}
             </td>
             <td className="p-3 text-left">
-              {purchaseRequest?.documentStatus}
+              {formatStatus(purchaseRequest?.documentStatus)}
             </td>
             <td className="p-3 text-left">
-              {purchaseRequest?.cancelled}
+              {formatCanceled(purchaseRequest?.cancelled)}
             </td>
-            <td className="p-3 text-left">
-              <Button label="action" onClick={() => alert(`Clicou na action da linha ${index}`)} />
+            <td className="p-3 text-left flex gap-5">
+              <ButtonIcon  icon="uil:trash-alt" onClick={() => alert(`Clicou na action da linha ${index}`)} />
+              <ButtonIcon  icon="icon-park-outline:doc-detail" onClick={() => alert(`Clicou na action da linha ${index}`)} />
             </td>
           </tr>
         ), []): null}

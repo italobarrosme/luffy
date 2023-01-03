@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { useState, useEffect } from 'react';
 import { useWindowSize } from 'usehooks-ts';
 import clsx from 'clsx'; 
+import { useAutoAnimate } from '@formkit/auto-animate/react'
 
 type menu = {
   name: string,
@@ -12,14 +13,14 @@ type menu = {
 
 export type SidebarMenuProps = {
   menu: menu[]
+  className?: string
 }
 
-
-
-export const SidebarMenu = ({menu}: SidebarMenuProps) => {
-  
+export const SidebarMenu = ({menu, className}: SidebarMenuProps) => {
+  const [animationParent] = useAutoAnimate<any>({
+    duration: 500,
+  })
   const [sidebar, setSidebar] = useState(false)
-
   const { width } = useWindowSize();
 
   useEffect(() => {
@@ -35,10 +36,9 @@ export const SidebarMenu = ({menu}: SidebarMenuProps) => {
     setSidebar(!sidebar)
   }
 
-
   return (
-    <div className={clsx('ease-out duration-100', sidebar ? 'w-52 relative top-0 h-screen bg-brand-primary rounded-tr-lg rounded-br-lg' : 'w-20 relative top-0 h-screen bg-brand-primary rounded-tr-lg rounded-br-lg')}>
-      <div className='flex items-center'>
+    <div className={clsx(className, 'ease-in duration-500', sidebar ? 'w-52 relative top-0 h-screen bg-brand-primary rounded-tr-lg rounded-br-lg' : 'w-20 relative top-0 h-screen bg-brand-primary rounded-tr-lg rounded-br-lg')}>
+      <div ref={animationParent} className='flex items-center'>
         <button className='p-4 text-brand-light' onClick={toggleBar}>
           <Icon icon="mdi:menu" width={32}/>
         </button>

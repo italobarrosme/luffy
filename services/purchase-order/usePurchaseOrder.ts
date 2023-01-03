@@ -1,7 +1,7 @@
 import { fetch } from "../axios";
 
 export const getPurchaseRequests = async () => {
-  return fetch({
+  return await fetch({
     method: "GET",
     path: `/api/purchase-order`
   })

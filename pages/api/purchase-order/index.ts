@@ -15,7 +15,7 @@ export default function handler(
     })
     
   
-  return res.status(response.status).json(response.data)
+  return res.json(response.data)
 }
   return usePurchaseRequestsFetch()
 }

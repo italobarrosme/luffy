@@ -5,12 +5,10 @@ import axios, {
   AxiosResponse,
 } from 'axios'
 
-if (process.env.NODE_ENV === 'development') {
-  const httpsAgent = new https.Agent({
-    rejectUnauthorized: false,
-  })
-  axios.defaults.httpsAgent = httpsAgent
-}
+const httpsAgent = new https.Agent({
+  rejectUnauthorized: false,
+})
+axios.defaults.httpsAgent = httpsAgent
 
 type headerCookie = {
   Cookie: string
@@ -28,9 +26,7 @@ type FetchParams = {
   withCredentials?: boolean
 }
 
-
 export const axiosInstance = axios.create()
-
 
 export function fetch({
   headers,
