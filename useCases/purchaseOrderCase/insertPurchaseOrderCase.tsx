@@ -6,6 +6,7 @@ import { SelectInput } from "@/usePieces/SelectInput"
 import { InputText } from "@/usePieces/InputText"
 import { InputDate } from "@/usePieces/InputDate"
 import { Table } from "@/useComponents/Table"
+import { Button } from "@/usePieces/Button"
 
 export const InsertPurchaseOrderCase = () => {
 
@@ -13,7 +14,7 @@ export const InsertPurchaseOrderCase = () => {
 
   // const { addToast } = useStoreListToast()
   // const [currentPage, setCurrentPage] = useState(1)
-  const [purchaseRequests, setPurchaseRequests] = useState<any>([])
+  const [itemsRequest, setItemsRequest] = useState<any>([])
 
   const POST_INSER_PURCHASEREQUESTS = () => {
     // getPurchaseRequests().then((response) => {
@@ -48,34 +49,51 @@ export const InsertPurchaseOrderCase = () => {
 
   const headers = [
     {
-      title: 'N° documento',
-      fn: () => console.log('N° documento')
+      title: 'Codigo',
+      fn: () => console.log('Codigo')
     },
     {
-      title: 'Responsável',
-      fn: () => console.log('Responsável')
+      title: 'Item',
+      fn: () => console.log('Item')
     },
     {
-      title: 'Departamento',
-      fn: () => console.log('Departamento')
+      title: 'Descrição do item',
+      fn: () => console.log('Descrição do item')
     },
     {
-      title: 'Assunto',
-      fn: () => console.log('Assunto')
+      title: 'Unidade de medida',
+      fn: () => console.log('Unidade de medida')
     },
     {
-      title: 'Status',
-      fn: () => console.log('Status')
+      title: 'Quantidade',
+      fn: () => console.log('Quantidade')
     },
     {
-      title: 'Cancelado',
+      title: 'Centro de Custo 1',
       fn: () => console.log('Cancelado')
     },
     {
-      title: 'Ações',
+      title: 'Centro de Custo 2',
       fn: () => console.log('Cancelado')
+    },
+    {
+      title: 'Projeto',
+      fn: () => console.log('Projeto')
     },
   ]
+
+  const handleAddItem = () => {
+    setItemsRequest([...itemsRequest, {
+      code: 'I00005',
+      item: 'ACHOCOLATADO1800kg',
+      description: 'TESTANDO',
+      unitMeasure: '1800KG',
+      quantity: '1',
+      costCenter1: 'APUAN',
+      costCenter2: 'AMERICA',
+      project: 'CHOCOLATE',
+    }])
+  }
 
 
   return (
@@ -104,54 +122,63 @@ export const InsertPurchaseOrderCase = () => {
           </div>
         </div>
       </div>
-      <Table title={'Solicitação de Compra'} headerItems={headers}>
-        {purchaseRequests ? purchaseRequests?.map((purchaseRequest: any, index: any) => (
+      <div className="my-4">
+      <Table title={'Itens para solicitação de compra'} headerItems={headers}>
+        {itemsRequest ? itemsRequest?.map((itemsRequest: any, index: any) => (
           <tr key={index} className="border-b border-gray-200 bg-gray-300">
-            <td className="p-3 flex items-center gap-2">
-             
+            <td className="p-3 text-left">
+             {itemsRequest.code}
             </td>
             <td className="p-3 text-left" >
-              
+              {itemsRequest.item}
             </td>
             <td className="p-3 text-left">
-             
+              {itemsRequest.description}
             </td>
             <td className="p-3 text-left">
-             
+              {itemsRequest.unitMeasure}
             </td>
             <td className="p-3 text-left">
-              
+              {itemsRequest.quantity}
             </td>
             <td className="p-3 text-left">
-             
+              {itemsRequest.costCenter1}
             </td>
-            <td className="p-3 text-left flex gap-5">
-
+            <td className="p-3 text-left">
+              {itemsRequest.costCenter2}
+            </td>
+            <td className="p-3 text-left">
+              {itemsRequest.project}
             </td>
           </tr>
         ), []): null}
 
-        {purchaseRequests.length === 0 ? (
+        {itemsRequest.length === 0 ? (
           <tr className="border-b border-gray-200 bg-gray-300">
             <td className="p-3 text-left" colSpan={8}>Nenhum registro encontrado</td>
           </tr>
         ): null}
       </Table>
+      </div>
       <div>
-        <h2 className="text-2xl font-semibold leading-tight w-full my-4">Inserir itens</h2>
-        <div className="flex flex-col bg-gray-300 p-8 rounded-lg gap-4">
+        <h2 className="text-2xl font-semibold leading-tight w-full my-4">Registrar itens</h2>
+        <div className="flex flex-col bg-brand-primary p-8 rounded-lg gap-4 text-white">
           <h2 className="text-lg font-semibold leading-tight w-full mb-4">
             Informações dos itens
           </h2>
           <div className="flex items-center gap-4">
-            <InputText label="Código do produto" name={'code'} defaultValue={''} />
-            <InputText label="Descrição do item" name={'description'} defaultValue={''} />
+            <InputText className="w-36" label="Código do produto" name={'code'} defaultValue={''} />
+            <InputText className="w-55"  label="Item" name={'description'} defaultValue={''} />
+            <InputText className="w-80"  label="Descrição do item" name={'description'} defaultValue={''} />
             
           </div>
           <div className="flex items-center gap-4">
             <InputText label="Quantidade" name={'quantity'} defaultValue={''} />
             <SelectInput label="Centro de custo" name={'resquester'} options={[]} />
             <SelectInput label="Projeto" name={'fileia'} options={[]} />
+          </div>
+          <div className="flex items-center gap-4 my-4">
+            <Button className='bg-brand-light text-brand-dark' label='Registrar novo item' onClick={handleAddItem} />
           </div>
         </div>
       </div>

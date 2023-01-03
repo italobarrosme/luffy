@@ -30,7 +30,7 @@ export const Navbar = ({menu, className, scrollPageY = 0}: NavbarProps) => {
 
   return (
     <>
-    <nav className={clsx('ease-in duration-500', !navbar ? 'opacity-0 absolute top-0 right-0 w-[50%] h-11 bg-brand-primary rounded-l-full z-30' : 'absolute top-0 right-0 w-[50%] h-11 bg-brand-primary rounded-l-full z-30')}>
+    <nav className={clsx('ease-in duration-500', !navbar ? 'opacity-0 absolute top-0 right-0 w-[80%] h-11 bg-brand-primary rounded-l-full z-30' : 'absolute top-0 right-0 w-[80%] h-11 bg-brand-primary rounded-l-full z-30')}>
       <ul className='flex-row-reverse flex px-4'>
         {menu.map((item, index) => {
           return (
