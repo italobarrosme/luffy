@@ -17,7 +17,7 @@ const Auth: NextPage = () => {
   
   useEffect(() => {
     if (status === 'authenticated') {
-      router.push('/purchase-order')
+      router.push('/purchase-request')
     }
 
     if (query.error) {

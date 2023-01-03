@@ -1,7 +1,7 @@
 import { Pagination } from "@/useComponents/Pagination"
 import { Table } from "@/useComponents/Table"
 import { useEffect, useState } from "react"
-import { getPurchaseRequests } from "@/services/purchase-order/usePurchaseOrder"
+import { getPurchaseRequests } from "@/services/purchase-request/usePurchaseRequest"
 import { formatDepartament, formatStatus, formatCanceled } from '@/utils/formatData'
 
 import { useNoAuthorized } from "@/hooks/useNoAuthorized"
@@ -9,7 +9,7 @@ import { ButtonIcon } from "@/usePieces/ButtonIcon"
 import { useStoreListToast } from "@/store/useStoreListToast"
 import { useRouter } from "next/router"
 
-export const PurchaseOrderCase = () => {
+export const PurchaseRequestCase = () => {
 
   const router = useRouter()
 
@@ -110,7 +110,7 @@ export const PurchaseOrderCase = () => {
   }
 
   const handleInsertPurchaseRequest = () => {
-    router.push('/purchase-order/insert-purchase-order')
+    router.push('/purchase-request/insert-purchase-request')
   }
 
 

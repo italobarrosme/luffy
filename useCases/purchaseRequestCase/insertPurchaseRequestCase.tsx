@@ -7,7 +7,7 @@ import { InputText } from "@/usePieces/InputText"
 import { InputDate } from "@/usePieces/InputDate"
 import { Table } from "@/useComponents/Table"
 
-export const InsertPurchaseOrderCase = () => {
+export const InsertPurchaseRequestCase = () => {
 
   // const router = useRouter()
 
