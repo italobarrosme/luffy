@@ -7,7 +7,7 @@ import { InputText } from "@/usePieces/InputText"
 import { InputDate } from "@/usePieces/InputDate"
 import { Table } from "@/useComponents/Table"
 import { Button } from "@/usePieces/Button"
-import { getEmployees } from "@/services/purchase-order/usePurchaseOrder"
+import { getAffiliate, getEmployees } from "@/services/purchase-order/usePurchaseOrder"
 import { useNoAuthorized } from "@/hooks/useNoAuthorized"
 
 export const InsertPurchaseOrderCase = () => {
@@ -39,6 +39,33 @@ export const InsertPurchaseOrderCase = () => {
     })
   }
 
+  const GET_AFFILIATE = () => {
+    getAffiliate().then((response) => {
+      const { data } = response
+      const affiliates = data.value.map((affiliate: any) => {
+        return {
+          value: affiliate.BPLID,
+          label: affiliate.BPLName
+        }
+      })
+
+      setAffiliates(affiliates)
+      
+      return response
+    }).catch((error) => {
+      const { status: responseStatus, statusText } = error.response
+
+      addToast({
+        type: 'error',
+        title: `Error ${responseStatus}`,
+        message: `Erro ao buscar afiliados, ${statusText}`,
+        duration: 8000
+      })
+
+      useNoAuthorized(responseStatus)
+    })
+  }
+
   // const POST_INSERT_PURCHASEREQUESTS = () => {
     // getPurchaseRequests().then((response) => {
     //  
@@ -61,6 +88,7 @@ export const InsertPurchaseOrderCase = () => {
   useEffect(() => {
     setDateNow()
     GET_EMPLOYEES()
+    GET_AFFILIATE()
   }, [])
 
   const { addToast } = useStoreListToast()
@@ -72,6 +100,7 @@ export const InsertPurchaseOrderCase = () => {
   const [dateDocument, setDateDocument] = useState('')
 
   const [employees, setEmployees] = useState<any>([])
+  const [affiliates, setAffiliates] = useState<any>([])
 
   const setDateNow = () => {
     const date = new Date()
@@ -215,7 +244,7 @@ export const InsertPurchaseOrderCase = () => {
           <div className="flex items-center gap-4">
             <InputText label="Quantidade" name={'quantity'} defaultValue={''} />
             <SelectInput label="Centro de custo" name={'resquester'} options={[]} />
-            <SelectInput label="Projeto" name={'fileia'} options={[]} />
+            <SelectInput label="Projeto" name={'fileia'} options={affiliates} />
           </div>
           <div className="flex items-center gap-4 my-4">
             <Button className='bg-brand-light text-brand-dark' label='Registrar novo item' onClick={handleAddItem} />
