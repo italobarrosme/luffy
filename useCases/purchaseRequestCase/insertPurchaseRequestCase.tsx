@@ -6,30 +6,42 @@ import { SelectInput } from "@/usePieces/SelectInput"
 import { InputText } from "@/usePieces/InputText"
 import { InputDate } from "@/usePieces/InputDate"
 import { Table } from "@/useComponents/Table"
+import { Button } from "@/usePieces/Button"
+import { getEmployees } from "@/services/purchase-order/usePurchaseOrder"
+import { useNoAuthorized } from "@/hooks/useNoAuthorized"
 
 export const InsertPurchaseRequestCase = () => {
 
-  // const router = useRouter()
+  const GET_EMPLOYEES = () => {
+    getEmployees().then((response) => {
+      const { data } = response
+      const employees = data.value.map((employee: any) => {
+        return {
+          value: employee.EmployeeID,
+          label: employee.FirstName + ' ' + employee.LastName
+        }
+      })
 
-  // const { addToast } = useStoreListToast()
-  // const [currentPage, setCurrentPage] = useState(1)
-  const [purchaseRequests, setPurchaseRequests] = useState<any>([])
-
-  const POST_INSER_PURCHASEREQUESTS = () => {
-    // getPurchaseRequests().then((response) => {
-    //   const adpterPurchaseRequests = response.data.value.map((purchaseRequest: any) => {
-    //     return {
-    //       cancelled: purchaseRequest?.Cancelled,
-    //       docentry: purchaseRequest?.DocEntry,
-    //       docnum: purchaseRequest?.DocNum,
-    //       documentStatus: purchaseRequest?.DocumentStatus,
-    //       requesterDepertment: purchaseRequest?.RequesterDepartment,
-    //       requesterName: purchaseRequest?.RequesterName,
-    //     }
-    //   })
-
-    //   setPurchaseRequests(adpterPurchaseRequests)
+      setEmployees(employees)
       
+      return response
+    }).catch((error) => {
+      const { status: responseStatus, statusText } = error.response
+
+      addToast({
+        type: 'error',
+        title: `Error ${responseStatus}`,
+        message: `Erro ao buscar funcionarios, ${statusText}`,
+        duration: 8000
+      })
+
+      useNoAuthorized(responseStatus)
+    })
+  }
+
+  // const POST_INSERT_PURCHASEREQUESTS = () => {
+    // getPurchaseRequests().then((response) => {
+    //  
     //   return response
     // }).catch((error) => {
     //   const { status: responseStatus, statusText } = error.response
@@ -44,38 +56,84 @@ export const InsertPurchaseRequestCase = () => {
     //   useNoAuthorized(responseStatus)
     // })
     
+  // }
+
+  useEffect(() => {
+    setDateNow()
+    GET_EMPLOYEES()
+  }, [])
+
+  const { addToast } = useStoreListToast()
+
+  const [itemsRequest, setItemsRequest] = useState<any>([])
+
+  const [dateLaunch, setDateLaunch] = useState('')
+  const [dateFinish, setDateFinish] = useState('')
+  const [dateDocument, setDateDocument] = useState('')
+
+  const [employees, setEmployees] = useState<any>([])
+
+  const setDateNow = () => {
+    const date = new Date()
+    const nowDate = date.toISOString().split('T')[0]
+
+    const dateFinish = date.setDate(date.getDate() + 30)
+    const dateFinishFormat = new Date(dateFinish).toISOString().split('T')[0]
+
+    setDateLaunch(nowDate)
+    setDateFinish(dateFinishFormat)
+    setDateDocument(nowDate)
+
+    return nowDate
   }
 
   const headers = [
     {
-      title: 'N° documento',
-      fn: () => console.log('N° documento')
+      title: 'Codigo',
+      fn: () => console.log('Codigo')
     },
     {
-      title: 'Responsável',
-      fn: () => console.log('Responsável')
+      title: 'Item',
+      fn: () => console.log('Item')
     },
     {
-      title: 'Departamento',
-      fn: () => console.log('Departamento')
+      title: 'Descrição do item',
+      fn: () => console.log('Descrição do item')
     },
     {
-      title: 'Assunto',
-      fn: () => console.log('Assunto')
+      title: 'Unidade de medida',
+      fn: () => console.log('Unidade de medida')
     },
     {
-      title: 'Status',
-      fn: () => console.log('Status')
+      title: 'Quantidade',
+      fn: () => console.log('Quantidade')
     },
     {
-      title: 'Cancelado',
+      title: 'Centro de Custo 1',
       fn: () => console.log('Cancelado')
     },
     {
-      title: 'Ações',
+      title: 'Centro de Custo 2',
       fn: () => console.log('Cancelado')
+    },
+    {
+      title: 'Projeto',
+      fn: () => console.log('Projeto')
     },
   ]
+
+  const handleAddItem = () => {
+    setItemsRequest([...itemsRequest, {
+      code: 'I00005',
+      item: 'ACHOCOLATADO1800kg',
+      description: 'TESTANDO',
+      unitMeasure: '1800KG',
+      quantity: '1',
+      costCenter1: 'APUAN',
+      costCenter2: 'AMERICA',
+      project: 'CHOCOLATE',
+    }])
+  }
 
 
   return (
@@ -87,71 +145,80 @@ export const InsertPurchaseRequestCase = () => {
             Dados para solicitação
           </h2>
           <div className="flex items-center gap-4">
-            <SelectInput label="Solicitante" name={'resquester'} options={[]} />
+            <SelectInput label="Solicitante" name={'resquester'} options={employees} />
             <InputText label="Departamento" name={'departament'} defaultValue={''} />
             <SelectInput label="Filial" name={'fileia'} options={[]} />
           </div>
           <div className="flex items-center gap-4">
-            <InputText label="Data de Lançamento" name={'dateSend'} defaultValue={''} />
-            <InputText label="Valida Ate" name={'dateFinish'} defaultValue={''} />
-            <InputText label="Data do Documento" name={'dateDocument'} defaultValue={''} />
+            <InputDate label="Data de Lançamento" name={'dateSend'} defaultValue={dateLaunch} />
+            <InputDate label="Valida Ate" name={'dateFinish'} defaultValue={dateFinish} />
+            <InputDate label="Data do Documento" name={'dateDocument'} defaultValue={dateDocument} />
           </div>
           <div className="flex items-center gap-4">
             <InputDate label="Data Necessaria" name="dateSend" />
           </div>
           <div className="flex items-center gap-4">
-            <InputText label="Observações" name={'description'} defaultValue={''} />
+            <InputText label="Observações" name={'description'} defaultValue={'0000-00-00'} />
           </div>
         </div>
       </div>
-      <Table title={'Solicitação de Compra'} headerItems={headers}>
-        {purchaseRequests ? purchaseRequests?.map((purchaseRequest: any, index: any) => (
+      <div className="my-4">
+      <Table title={'Itens para solicitação de compra'} headerItems={headers}>
+        {itemsRequest ? itemsRequest?.map((itemsRequest: any, index: any) => (
           <tr key={index} className="border-b border-gray-200 bg-gray-300">
-            <td className="p-3 flex items-center gap-2">
-             
+            <td className="p-3 text-left">
+             {itemsRequest.code}
             </td>
             <td className="p-3 text-left" >
-              
+              {itemsRequest.item}
             </td>
             <td className="p-3 text-left">
-             
+              {itemsRequest.description}
             </td>
             <td className="p-3 text-left">
-             
+              {itemsRequest.unitMeasure}
             </td>
             <td className="p-3 text-left">
-              
+              {itemsRequest.quantity}
             </td>
             <td className="p-3 text-left">
-             
+              {itemsRequest.costCenter1}
             </td>
-            <td className="p-3 text-left flex gap-5">
-
+            <td className="p-3 text-left">
+              {itemsRequest.costCenter2}
+            </td>
+            <td className="p-3 text-left">
+              {itemsRequest.project}
             </td>
           </tr>
         ), []): null}
 
-        {purchaseRequests.length === 0 ? (
+        {itemsRequest.length === 0 ? (
           <tr className="border-b border-gray-200 bg-gray-300">
             <td className="p-3 text-left" colSpan={8}>Nenhum registro encontrado</td>
           </tr>
         ): null}
       </Table>
+      </div>
       <div>
-        <h2 className="text-2xl font-semibold leading-tight w-full my-4">Inserir itens</h2>
-        <div className="flex flex-col bg-gray-300 p-8 rounded-lg gap-4">
+        <h2 className="text-2xl font-semibold leading-tight w-full my-4">Registrar itens</h2>
+        <div className="flex flex-col bg-brand-primary p-8 rounded-lg gap-4 text-white">
           <h2 className="text-lg font-semibold leading-tight w-full mb-4">
             Informações dos itens
           </h2>
           <div className="flex items-center gap-4">
-            <InputText label="Código do produto" name={'code'} defaultValue={''} />
-            <InputText label="Descrição do item" name={'description'} defaultValue={''} />
+            <InputText className="w-36" label="Código do produto" name={'code'} defaultValue={''} />
+            <InputText className="w-55"  label="Item" name={'description'} defaultValue={''} />
+            <InputText className="w-80"  label="Descrição do item" name={'description'} defaultValue={''} />
             
           </div>
           <div className="flex items-center gap-4">
             <InputText label="Quantidade" name={'quantity'} defaultValue={''} />
             <SelectInput label="Centro de custo" name={'resquester'} options={[]} />
             <SelectInput label="Projeto" name={'fileia'} options={[]} />
+          </div>
+          <div className="flex items-center gap-4 my-4">
+            <Button className='bg-brand-light text-brand-dark' label='Registrar novo item' onClick={handleAddItem} />
           </div>
         </div>
       </div>
