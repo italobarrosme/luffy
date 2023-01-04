@@ -10,7 +10,7 @@ import { Button } from "@/usePieces/Button"
 import { getAffiliate, getEmployees } from "@/services/purchase-order/usePurchaseOrder"
 import { useNoAuthorized } from "@/hooks/useNoAuthorized"
 
-export const InsertPurchaseOrderCase = () => {
+export const InsertPurchaseRequestCase = () => {
 
   const GET_EMPLOYEES = () => {
     getEmployees().then((response) => {

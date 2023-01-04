@@ -13,7 +13,7 @@ const DefaultLayout = ({ children, title }: Component) => {
   const menu = [
     {
       name: 'Solicitação de Compra',
-      link: '/purchase-order',
+      link: '/purchase-request',
       icon: 'mdi:cart'
     }
   ]

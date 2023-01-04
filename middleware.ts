@@ -17,6 +17,6 @@ export default function middleware(req: NextRequest, res: NextResponse) {
   return NextResponse.next()
 }
 export const config = {
-  matcher: ['/purchase-order/:path*'],
+  matcher: ['/purchase-requests/:path*'],
 }
 
