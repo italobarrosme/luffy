@@ -9,28 +9,9 @@ import { Table } from "@/useComponents/Table"
 import { Button } from "@/usePieces/Button"
 
 export const InsertPurchaseOrderCase = () => {
-
-  // const router = useRouter()
-
-  // const { addToast } = useStoreListToast()
-  // const [currentPage, setCurrentPage] = useState(1)
-  const [itemsRequest, setItemsRequest] = useState<any>([])
-
   const POST_INSER_PURCHASEREQUESTS = () => {
     // getPurchaseRequests().then((response) => {
-    //   const adpterPurchaseRequests = response.data.value.map((purchaseRequest: any) => {
-    //     return {
-    //       cancelled: purchaseRequest?.Cancelled,
-    //       docentry: purchaseRequest?.DocEntry,
-    //       docnum: purchaseRequest?.DocNum,
-    //       documentStatus: purchaseRequest?.DocumentStatus,
-    //       requesterDepertment: purchaseRequest?.RequesterDepartment,
-    //       requesterName: purchaseRequest?.RequesterName,
-    //     }
-    //   })
-
-    //   setPurchaseRequests(adpterPurchaseRequests)
-      
+    //  
     //   return response
     // }).catch((error) => {
     //   const { status: responseStatus, statusText } = error.response
@@ -46,6 +27,36 @@ export const InsertPurchaseOrderCase = () => {
     // })
     
   }
+
+  useEffect(() => {
+    setDateNow()
+  }, [])
+
+  // const router = useRouter()
+
+  // const { addToast } = useStoreListToast()
+
+  const [itemsRequest, setItemsRequest] = useState<any>([])
+
+  const [dateLaunch, setDateLaunch] = useState('')
+  const [dateFinish, setDateFinish] = useState('')
+  const [dateDocument, setDateDocument] = useState('')
+
+  const setDateNow = () => {
+    const date = new Date()
+    const nowDate = date.toISOString().split('T')[0]
+
+    const dateFinish = date.setDate(date.getDate() + 30)
+    const dateFinishFormat = new Date(dateFinish).toISOString().split('T')[0]
+
+    setDateLaunch(nowDate)
+    setDateFinish(dateFinishFormat)
+    setDateDocument(nowDate)
+
+    return nowDate
+  }
+
+  
 
   const headers = [
     {
@@ -110,15 +121,15 @@ export const InsertPurchaseOrderCase = () => {
             <SelectInput label="Filial" name={'fileia'} options={[]} />
           </div>
           <div className="flex items-center gap-4">
-            <InputText label="Data de Lançamento" name={'dateSend'} defaultValue={''} />
-            <InputText label="Valida Ate" name={'dateFinish'} defaultValue={''} />
-            <InputText label="Data do Documento" name={'dateDocument'} defaultValue={''} />
+            <InputDate label="Data de Lançamento" name={'dateSend'} defaultValue={dateLaunch} />
+            <InputDate label="Valida Ate" name={'dateFinish'} defaultValue={dateFinish} />
+            <InputDate label="Data do Documento" name={'dateDocument'} defaultValue={dateDocument} />
           </div>
           <div className="flex items-center gap-4">
             <InputDate label="Data Necessaria" name="dateSend" />
           </div>
           <div className="flex items-center gap-4">
-            <InputText label="Observações" name={'description'} defaultValue={''} />
+            <InputText label="Observações" name={'description'} defaultValue={'0000-00-00'} />
           </div>
         </div>
       </div>
