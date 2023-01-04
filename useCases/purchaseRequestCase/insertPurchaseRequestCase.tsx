@@ -7,7 +7,7 @@ import { InputText } from "@/usePieces/InputText"
 import { InputDate } from "@/usePieces/InputDate"
 import { Table } from "@/useComponents/Table"
 import { Button } from "@/usePieces/Button"
-import { getAffiliate, getEmployees } from "@/services/purchase-order/usePurchaseOrder"
+import { getAffiliate, getEmployees } from "@/services/purchase-request/usePurchaseRequest"
 import { useNoAuthorized } from "@/hooks/useNoAuthorized"
 
 export const InsertPurchaseRequestCase = () => {
@@ -176,7 +176,7 @@ export const InsertPurchaseRequestCase = () => {
           <div className="flex items-center gap-4">
             <SelectInput label="Solicitante" name={'resquester'} options={employees} />
             <InputText label="Departamento" name={'departament'} defaultValue={''} />
-            <SelectInput label="Filial" name={'fileia'} options={[]} />
+            <SelectInput label="Filial" name={'fileia'} options={affiliates} />
           </div>
           <div className="flex items-center gap-4">
             <InputDate label="Data de Lançamento" name={'dateSend'} defaultValue={dateLaunch} />
@@ -244,7 +244,7 @@ export const InsertPurchaseRequestCase = () => {
           <div className="flex items-center gap-4">
             <InputText label="Quantidade" name={'quantity'} defaultValue={''} />
             <SelectInput label="Centro de custo" name={'resquester'} options={[]} />
-            <SelectInput label="Projeto" name={'fileia'} options={affiliates} />
+            <SelectInput label="Projeto" name={'fileia'} options={[]} />
           </div>
           <div className="flex items-center gap-4 my-4">
             <Button className='bg-brand-light text-brand-dark' label='Registrar novo item' onClick={handleAddItem} />

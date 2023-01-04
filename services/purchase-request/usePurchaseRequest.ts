@@ -10,13 +10,13 @@ export const getPurchaseRequests = async () => {
 export const getEmployees = async () => {
   return await fetch({
     method: "GET",
-    path: `/api/purchase-order/employees`
+    path: `/api/purchase-request/employees`
   })
 }
 
 export const getAffiliate = async () => {
   return await fetch({
     method: "GET",
-    path: `/api/purchase-order/affiliate`
+    path: `/api/purchase-request/affiliate`
   })
 }
