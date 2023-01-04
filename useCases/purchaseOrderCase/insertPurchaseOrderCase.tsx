@@ -7,9 +7,39 @@ import { InputText } from "@/usePieces/InputText"
 import { InputDate } from "@/usePieces/InputDate"
 import { Table } from "@/useComponents/Table"
 import { Button } from "@/usePieces/Button"
+import { getEmployees } from "@/services/purchase-order/usePurchaseOrder"
+import { useNoAuthorized } from "@/hooks/useNoAuthorized"
 
 export const InsertPurchaseOrderCase = () => {
-  const POST_INSER_PURCHASEREQUESTS = () => {
+
+  const GET_EMPLOYEES = () => {
+    getEmployees().then((response) => {
+      const { data } = response
+      const employees = data.value.map((employee: any) => {
+        return {
+          value: employee.EmployeeID,
+          label: employee.FirstName + ' ' + employee.LastName
+        }
+      })
+
+      setEmployees(employees)
+      
+      return response
+    }).catch((error) => {
+      const { status: responseStatus, statusText } = error.response
+
+      addToast({
+        type: 'error',
+        title: `Error ${responseStatus}`,
+        message: `Erro ao buscar funcionarios, ${statusText}`,
+        duration: 8000
+      })
+
+      useNoAuthorized(responseStatus)
+    })
+  }
+
+  // const POST_INSERT_PURCHASEREQUESTS = () => {
     // getPurchaseRequests().then((response) => {
     //  
     //   return response
@@ -26,21 +56,22 @@ export const InsertPurchaseOrderCase = () => {
     //   useNoAuthorized(responseStatus)
     // })
     
-  }
+  // }
 
   useEffect(() => {
     setDateNow()
+    GET_EMPLOYEES()
   }, [])
 
-  // const router = useRouter()
-
-  // const { addToast } = useStoreListToast()
+  const { addToast } = useStoreListToast()
 
   const [itemsRequest, setItemsRequest] = useState<any>([])
 
   const [dateLaunch, setDateLaunch] = useState('')
   const [dateFinish, setDateFinish] = useState('')
   const [dateDocument, setDateDocument] = useState('')
+
+  const [employees, setEmployees] = useState<any>([])
 
   const setDateNow = () => {
     const date = new Date()
@@ -55,8 +86,6 @@ export const InsertPurchaseOrderCase = () => {
 
     return nowDate
   }
-
-  
 
   const headers = [
     {
@@ -116,7 +145,7 @@ export const InsertPurchaseOrderCase = () => {
             Dados para solicitação
           </h2>
           <div className="flex items-center gap-4">
-            <SelectInput label="Solicitante" name={'resquester'} options={[]} />
+            <SelectInput label="Solicitante" name={'resquester'} options={employees} />
             <InputText label="Departamento" name={'departament'} defaultValue={''} />
             <SelectInput label="Filial" name={'fileia'} options={[]} />
           </div>
