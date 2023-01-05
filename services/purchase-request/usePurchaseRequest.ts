@@ -45,7 +45,7 @@ export const getProjects = async () => {
 export const getDepartments = async (id: any) => {
   return await fetch({
     method: "GET",
-    path: `/api/purchase-request/departments`,
+    path: '/api/purchase-request/departaments',
     params: {
       id
     } 

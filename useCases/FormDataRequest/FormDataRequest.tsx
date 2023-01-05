@@ -1,8 +1,8 @@
 import { InputDate } from "@/usePieces/InputDate"
 import { InputText } from "@/usePieces/InputText"
 import { SelectInput } from "@/usePieces/SelectInput"
-import { useEffect, useState } from "react"
-import { getAffiliate, getEmployees } from "@/services/purchase-request/usePurchaseRequest"
+import { ChangeEvent, useEffect, useState } from "react"
+import { getAffiliate, getEmployees, getDepartments } from "@/services/purchase-request/usePurchaseRequest"
 import { useStoreListToast } from "@/store/useStoreListToast"
 import { useNoAuthorized } from "@/hooks/useNoAuthorized"
 
@@ -21,6 +21,10 @@ export const FormDataRequest = ({emitDataRequest}:FormDataRequestProps) => {
   
   const [employees, setEmployees] = useState<any>([])
   const [affiliates, setAffiliates] = useState<any>([])
+  const [department, setDepartment] = useState<any>({
+    value: '',
+    label: ''
+  })
   
   const setDateNow = () => {
     const date = new Date()
@@ -36,6 +40,33 @@ export const FormDataRequest = ({emitDataRequest}:FormDataRequestProps) => {
     return nowDate
   }
 
+  const GET_DEPARTMENT = (id: any) => {
+    getDepartments(id).then((response) => {
+      const { data } = response
+      const department = 
+        {
+          value: data.Code,
+          label: data.Name
+        }
+
+        setDepartment(department)
+      
+      return response
+    
+    }).catch((error) => {
+      const { status: responseStatus, statusText } = error.response
+
+      addToast({
+        type: 'error',
+        title: `Error ${responseStatus}`,
+        message: `Erro ao buscar departamentos, ${statusText}`,
+        duration: 8000
+      })
+
+      useNoAuthorized(responseStatus)
+    })
+  }
+
   const GET_EMPLOYEES = () => {
     getEmployees().then((response) => {
       const { data } = response
@@ -47,6 +78,7 @@ export const FormDataRequest = ({emitDataRequest}:FormDataRequestProps) => {
       })
 
       setEmployees(employees)
+      handleEmployees({target: {value: employees[0].value}})
       
       return response
     }).catch((error) => {
@@ -90,6 +122,11 @@ export const FormDataRequest = ({emitDataRequest}:FormDataRequestProps) => {
     })
   }
 
+  const handleEmployees = (event: any) => {
+    GET_DEPARTMENT(event.target.value)
+    return
+  }
+
 
   useEffect(() => {
     setDateNow()
@@ -105,8 +142,8 @@ export const FormDataRequest = ({emitDataRequest}:FormDataRequestProps) => {
             Dados para solicitação
           </h2>
           <div className="flex items-center gap-4">
-            <SelectInput label="Solicitante" name={'resquester'} options={employees} />
-            <InputText label="Departamento" name={'departament'} defaultValue={''} />
+            <SelectInput label="Solicitante" name={'resquester'} options={employees} onChange={(ev) => handleEmployees(ev)}  />
+            <InputText label="Departamento" name={'departament'} value={department.label} readOnly />
             <SelectInput label="Filial" name={'fileia'} options={affiliates} />
           </div>
           <div className="flex items-center gap-4">
