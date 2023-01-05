@@ -1,70 +1,17 @@
-import { useEffect, useState } from "react"
-
-import { useStoreListToast } from "@/store/useStoreListToast"
+import { useState } from "react"
 import { useRouter } from "next/router"
 import { SelectInput } from "@/usePieces/SelectInput"
 import { InputText } from "@/usePieces/InputText"
 import { InputDate } from "@/usePieces/InputDate"
 import { Table } from "@/useComponents/Table"
 import { Button } from "@/usePieces/Button"
-import { getAffiliate, getEmployees } from "@/services/purchase-request/usePurchaseRequest"
-import { useNoAuthorized } from "@/hooks/useNoAuthorized"
+
+import { FormSetItemsRequest } from "../FormSetItemsRequest"
+import { FormDataRequest } from "../FormDataRequest"
 
 export const InsertPurchaseRequestCase = () => {
 
-  const GET_EMPLOYEES = () => {
-    getEmployees().then((response) => {
-      const { data } = response
-      const employees = data.value.map((employee: any) => {
-        return {
-          value: employee.EmployeeID,
-          label: employee.FirstName + ' ' + employee.LastName
-        }
-      })
-
-      setEmployees(employees)
-      
-      return response
-    }).catch((error) => {
-      const { status: responseStatus, statusText } = error.response
-
-      addToast({
-        type: 'error',
-        title: `Error ${responseStatus}`,
-        message: `Erro ao buscar funcionarios, ${statusText}`,
-        duration: 8000
-      })
-
-      useNoAuthorized(responseStatus)
-    })
-  }
-
-  const GET_AFFILIATE = () => {
-    getAffiliate().then((response) => {
-      const { data } = response
-      const affiliates = data.value.map((affiliate: any) => {
-        return {
-          value: affiliate.BPLID,
-          label: affiliate.BPLName
-        }
-      })
-
-      setAffiliates(affiliates)
-      
-      return response
-    }).catch((error) => {
-      const { status: responseStatus, statusText } = error.response
-
-      addToast({
-        type: 'error',
-        title: `Error ${responseStatus}`,
-        message: `Erro ao buscar afiliados, ${statusText}`,
-        duration: 8000
-      })
-
-      useNoAuthorized(responseStatus)
-    })
-  }
+  
 
   // const POST_INSERT_PURCHASEREQUESTS = () => {
     // getPurchaseRequests().then((response) => {
@@ -85,36 +32,11 @@ export const InsertPurchaseRequestCase = () => {
     
   // }
 
-  useEffect(() => {
-    setDateNow()
-    GET_EMPLOYEES()
-    GET_AFFILIATE()
-  }, [])
+  // useEffect(() => {
+  // }, [])
 
-  const { addToast } = useStoreListToast()
-
+  
   const [itemsRequest, setItemsRequest] = useState<any>([])
-
-  const [dateLaunch, setDateLaunch] = useState('')
-  const [dateFinish, setDateFinish] = useState('')
-  const [dateDocument, setDateDocument] = useState('')
-
-  const [employees, setEmployees] = useState<any>([])
-  const [affiliates, setAffiliates] = useState<any>([])
-
-  const setDateNow = () => {
-    const date = new Date()
-    const nowDate = date.toISOString().split('T')[0]
-
-    const dateFinish = date.setDate(date.getDate() + 30)
-    const dateFinishFormat = new Date(dateFinish).toISOString().split('T')[0]
-
-    setDateLaunch(nowDate)
-    setDateFinish(dateFinishFormat)
-    setDateDocument(nowDate)
-
-    return nowDate
-  }
 
   const headers = [
     {
@@ -151,46 +73,18 @@ export const InsertPurchaseRequestCase = () => {
     },
   ]
 
-  const handleAddItem = () => {
-    setItemsRequest([...itemsRequest, {
-      code: 'I00005',
-      item: 'ACHOCOLATADO1800kg',
-      description: 'TESTANDO',
-      unitMeasure: '1800KG',
-      quantity: '1',
-      costCenter1: 'APUAN',
-      costCenter2: 'AMERICA',
-      project: 'CHOCOLATE',
-    }])
+  const handleAddItem = (item: any) => {
+    console.log(item, 'ITEM')
+  }
+
+  const handleDataRequest = (data: any) => {
+    console.log(data, 'DATA')
   }
 
 
   return (
     <>
-      <div>
-      <h2 className="text-2xl font-semibold leading-tight w-full my-4">Inserir solicitação de compra</h2>
-        <div className="flex flex-col bg-brand-primary p-8 rounded-lg gap-4 text-white">
-          <h2 className="text-lg font-semibold leading-tight w-full mb-4">
-            Dados para solicitação
-          </h2>
-          <div className="flex items-center gap-4">
-            <SelectInput label="Solicitante" name={'resquester'} options={employees} />
-            <InputText label="Departamento" name={'departament'} defaultValue={''} />
-            <SelectInput label="Filial" name={'fileia'} options={affiliates} />
-          </div>
-          <div className="flex items-center gap-4">
-            <InputDate label="Data de Lançamento" name={'dateSend'} defaultValue={dateLaunch} />
-            <InputDate label="Valida Ate" name={'dateFinish'} defaultValue={dateFinish} />
-            <InputDate label="Data do Documento" name={'dateDocument'} defaultValue={dateDocument} />
-          </div>
-          <div className="flex items-center gap-4">
-            <InputDate label="Data Necessaria" name="dateSend" />
-          </div>
-          <div className="flex items-center gap-4">
-            <InputText label="Observações" name={'description'} defaultValue={'0000-00-00'} />
-          </div>
-        </div>
-      </div>
+      <FormDataRequest  emitDataRequest={handleDataRequest}/>
       <div className="my-4">
       <Table title={'Itens para solicitação de compra'} headerItems={headers}>
         {itemsRequest ? itemsRequest?.map((itemsRequest: any, index: any) => (
@@ -229,28 +123,7 @@ export const InsertPurchaseRequestCase = () => {
         ): null}
       </Table>
       </div>
-      <div>
-        <h2 className="text-2xl font-semibold leading-tight w-full my-4">Registrar itens</h2>
-        <div className="flex flex-col bg-brand-primary p-8 rounded-lg gap-4 text-white">
-          <h2 className="text-lg font-semibold leading-tight w-full mb-4">
-            Informações dos itens
-          </h2>
-          <div className="flex items-center gap-4">
-            <InputText className="w-36" label="Código do produto" name={'code'} defaultValue={''} />
-            <InputText className="w-55"  label="Item" name={'description'} defaultValue={''} />
-            <InputText className="w-80"  label="Descrição do item" name={'description'} defaultValue={''} />
-            
-          </div>
-          <div className="flex items-center gap-4">
-            <InputText label="Quantidade" name={'quantity'} defaultValue={''} />
-            <SelectInput label="Centro de custo" name={'resquester'} options={[]} />
-            <SelectInput label="Projeto" name={'fileia'} options={[]} />
-          </div>
-          <div className="flex items-center gap-4 my-4">
-            <Button className='bg-brand-light text-brand-dark' label='Registrar novo item' onClick={handleAddItem} />
-          </div>
-        </div>
-      </div>
+      <FormSetItemsRequest emitItemsRequest={(ev) => handleAddItem(ev)} />
     </>
   )
 }
