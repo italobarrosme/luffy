@@ -1,5 +1,5 @@
 import { useNoAuthorized } from "@/hooks/useNoAuthorized"
-import { getProjects } from "@/services/purchase-request/usePurchaseRequest"
+import { getProjects, getProfitCenters } from "@/services/purchase-request/usePurchaseRequest"
 import { useStoreListToast } from "@/store/useStoreListToast"
 import { Button } from "@/usePieces/Button"
 import { InputText } from "@/usePieces/InputText"
@@ -16,9 +16,48 @@ export const FormSetItemsRequest = ({emitObject}:FormSetItemsRequestProps) => {
   const [project, setProject] = useState<any>([])
 
   const [DocumentLines, setDocumentLines] = useState<any>([])
+  const [profitCenter1, setProfitCenter1] = useState<any>([])
+  const [profitCenter2, setProfitCenter2] = useState<any>([])
+
+  const [item, setItem] = useState<any>('ITEM FALTA API')
   
   const { addToast } = useStoreListToast()
 
+  const GET_PROFITCENTER = () => {
+    getProfitCenters().then((response) => {
+      const { data } = response
+      
+      
+      const profitCenters = data.value.map((profitCenter: any) => {
+        return {
+          value: profitCenter.CenterCode,
+          label: profitCenter.CenterName
+        }
+      })
+
+      setProfitCenter1([{
+        value: '',
+        label: 'Selecione um centro de custo'
+      },...profitCenters])
+      setProfitCenter2([{
+        value: '',
+        label: 'Selecione um centro de custo'
+      },...profitCenters])
+      
+      return response
+    }).catch((error) => {
+      const { status: responseStatus, statusText } = error.response
+
+      addToast({
+        type: 'error',
+        title: 'Erro ao buscar projetos',
+        message: `Erro ao buscar projetos, ${statusText}`,
+        duration: 8000
+      })
+
+      useNoAuthorized(responseStatus)
+    })
+  }
 
   const GET_PROJECT = () => {
     getProjects().then((response) => {
@@ -52,6 +91,9 @@ export const FormSetItemsRequest = ({emitObject}:FormSetItemsRequestProps) => {
 
   useEffect(() => {
     GET_PROJECT()
+    GET_PROFITCENTER()
+
+    handlerItem()
   }, [])
 
 
@@ -60,6 +102,15 @@ export const FormSetItemsRequest = ({emitObject}:FormSetItemsRequestProps) => {
     setDocumentLines({
       ...DocumentLines,
       ProjectCode: event.target.value
+    })
+
+    return
+  }
+
+  const handlerQuantity = (event: any) => {
+    setDocumentLines({
+      ...DocumentLines,
+      Quantity: event.target.value
     })
 
     return
@@ -74,9 +125,43 @@ export const FormSetItemsRequest = ({emitObject}:FormSetItemsRequestProps) => {
     return
   }
 
+  const handlerProfitCenter1 = (event: any) => {
+    setDocumentLines({
+      ...DocumentLines,
+      CostingCode: event.target.value
+    })
+
+    return
+  }
+
+  const handlerProfitCenter2 = (event: any) => {
+    setDocumentLines({
+      ...DocumentLines,
+      CostingCode2: event.target.value
+    })
+
+    return
+  }
+
+  const handlerDescription = (event: any) => {
+    setDocumentLines({
+      ...DocumentLines,
+      ItemDescription: event.target.value
+    })
+
+    return
+  }
+
+  const handlerItem = () => {
+    setDocumentLines({
+      ...DocumentLines,
+      Item: item
+    })
+
+    return
+  }
+
   const handlerDocumentLines = () => {
-    console.log(DocumentLines)
-    
     emitObject(DocumentLines)
   }
 
@@ -87,21 +172,21 @@ export const FormSetItemsRequest = ({emitObject}:FormSetItemsRequestProps) => {
           <h2 className="text-lg font-semibold leading-tight w-full mb-4">
             Informações dos itens
           </h2>
-          <div className="flex items-center gap-4">
-            <InputText className="w-36" label="Código do produto" name={'ItemCode'} defaultValue={''} onChange={handlerItemCode} />
-            <InputText className="w-55"  label="Item" name={'description'} defaultValue={''} />
-            <InputText className="w-80"  label="Descrição do item" name={'description'} defaultValue={''} />
-            
-          </div>
-          <div className="flex items-center gap-4">
-            <InputText label="Quantidade" name={'Quantity'} defaultValue={''} />
-            <SelectInput label="Centro de custo 1" name={'CostingCode'} options={[]} />
-            <SelectInput label="Centro de custo 2" name={'CostingCode2'} options={[]} />
-            <SelectInput label="Projeto" name={'ProjectCode'} options={project} value={project[0]} onChange={(ev) => handlerProject(ev)} />
-          </div>
-          <div className="flex items-center gap-4 my-4">
-            <Button className='bg-brand-light text-brand-dark' label='Registrar novo item' onClick={handlerDocumentLines} />
-          </div>
+            <div className="flex items-center gap-4">
+              <InputText className="w-36" label="Código do produto" name={'ItemCode'} defaultValue={''} onChange={handlerItemCode} />
+              <InputText className="w-55"  label="Item" name={'Item'} value={item} readOnly/>
+              <InputText className="w-80"  label="Descrição do item" name={'ItemDescription'} defaultValue={''} onChange={handlerDescription} />
+              
+            </div>
+            <div className="flex items-center gap-4">
+              <InputText className="w-36" type="number" label="Quantidade" name={'Quantity'} defaultValue={''} onChange={handlerQuantity} />
+              <SelectInput label="Centro de custo 1" name={'CostingCode'} options={profitCenter1} onChange={(ev) => handlerProfitCenter1(ev)} />
+              <SelectInput label="Centro de custo 2" name={'CostingCode2'} options={profitCenter2} onChange={(ev) => handlerProfitCenter2(ev)} />
+              <SelectInput label="Projeto" name={'ProjectCode'} options={project} onChange={(ev) => handlerProject(ev)} />
+            </div>
+            <div className="flex items-center gap-4 my-4">
+              <Button type="submit" className='bg-brand-light text-brand-dark' label='Registrar novo item' onClick={handlerDocumentLines} />
+            </div>
         </div>
       </div>
   )

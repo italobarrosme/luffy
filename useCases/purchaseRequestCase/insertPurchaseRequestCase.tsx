@@ -70,6 +70,8 @@ export const InsertPurchaseRequestCase = () => {
 
   const handleAddItem = (item: any) => {
     console.log(item, 'ITEM')
+
+    setItemsRequest([...itemsRequest, item])
   }
 
   const handleDataRequest = (data: any) => {
@@ -85,28 +87,28 @@ export const InsertPurchaseRequestCase = () => {
         {itemsRequest ? itemsRequest?.map((itemsRequest: any, index: any) => (
           <tr key={index} className="border-b border-gray-200 bg-gray-300">
             <td className="p-3 text-left">
-             {itemsRequest.code}
+             {itemsRequest.ItemCode}
             </td>
             <td className="p-3 text-left" >
-              {itemsRequest.item}
+              {itemsRequest.Item}
             </td>
             <td className="p-3 text-left">
-              {itemsRequest.description}
+              {itemsRequest.ItemDescription}
             </td>
             <td className="p-3 text-left">
-              {itemsRequest.unitMeasure}
+              {itemsRequest.unitMeasure || 'Nao sei de onde vem esse dado'}
             </td>
             <td className="p-3 text-left">
-              {itemsRequest.quantity}
+              {itemsRequest.Quantity}
             </td>
             <td className="p-3 text-left">
-              {itemsRequest.costCenter1}
+              {itemsRequest.CostingCode}
             </td>
             <td className="p-3 text-left">
-              {itemsRequest.costCenter2}
+              {itemsRequest.CostingCode2}
             </td>
             <td className="p-3 text-left">
-              {itemsRequest.project}
+              {itemsRequest.ProjectCode}
             </td>
           </tr>
         ), []): null}
