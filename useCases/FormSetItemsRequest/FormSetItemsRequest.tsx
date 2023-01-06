@@ -98,7 +98,6 @@ export const FormSetItemsRequest = ({emitObject}:FormSetItemsRequestProps) => {
 
 
   const handlerProject = (event: any) => {
-    console.log(event.target.value, 'HERE')
     setDocumentLines({
       ...DocumentLines,
       ProjectCode: event.target.value

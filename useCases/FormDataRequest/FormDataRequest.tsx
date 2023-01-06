@@ -225,9 +225,9 @@ export const FormDataRequest = ({emitDataRequest}:FormDataRequestProps) => {
             Dados para solicitação
           </h2>
           <div className="flex items-center gap-4">
-            <SelectInput label="Solicitante" name={'resquester'} options={employees} onChange={(ev) => handlerEmployees(ev)}  />
-            <InputText label="Departamento" name={'departament'} value={department.label} readOnly />
-            <SelectInput label="Filial" name={'fileia'} options={affiliates} onChange={(ev) => handlerAffiliates(ev)} />
+            <SelectInput label="Solicitante" name={'requesterName'} options={employees} onChange={(ev) => handlerEmployees(ev)}  />
+            <InputText label="Departamento" name={'requesterDepertment'} value={department.label} readOnly />
+            <SelectInput label="Filial" name={'affiliate'} options={affiliates} onChange={(ev) => handlerAffiliates(ev)} />
           </div>
           <div className="flex items-center gap-4">
             <InputDate label="Data de Lançamento" name={'TaxDate'} value={taxDate} onChange={(ev) => handlerTaxDate(ev)} />
@@ -235,12 +235,12 @@ export const FormDataRequest = ({emitDataRequest}:FormDataRequestProps) => {
             <InputDate label="Data do Documento" name={'DocDate'}  value={docDate}  onChange={(ev) => handlerDocDate(ev)}  />
           </div>
           <div className="flex items-center gap-4">
-            <InputDate label="Data Necessaria" name={'RequriedDate'} defaultValue={requriedDate} onChange={(ev) => handlerRequriedDate(ev)}  />
+          <InputDate label="Data Necessaria" name={'RequriedDate'} defaultValue={requriedDate} onChange={(ev) => handlerRequriedDate(ev)}  />
           </div>
           <div className="flex items-center gap-4">
-            <InputText label="Observações" name={'Comments'} defaultValue={''} onChange={(ev) => handlerComments(ev)} />
-          </div>
+          <InputText label="Observações" name={'Comments'} defaultValue={''} onChange={(ev) => handlerComments(ev)} />
         </div>
       </div>
+    </div>
   )
 }

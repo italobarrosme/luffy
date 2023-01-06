@@ -19,6 +19,7 @@ export const PurchaseRequestCase = () => {
 
   const GET_PURCHASEREQUESTS = () => {
     getPurchaseRequests().then((response) => {
+      console.log(response.data.value, 'response.data.value')
       const adpterPurchaseRequests = response.data.value.map((purchaseRequest: any) => {
         return {
           cancelled: purchaseRequest?.Cancelled,
@@ -113,6 +114,13 @@ export const PurchaseRequestCase = () => {
     router.push('/purchase-request/insert-purchase-request')
   }
 
+  const handlerDetailsPurchaseRequest = (id: any) => {
+    router.push({
+      pathname: '/purchase-request/details-purchase-request',
+      query: { id: id }
+    })
+  }
+
 
 
   return (
@@ -140,7 +148,7 @@ export const PurchaseRequestCase = () => {
             </td>
             <td className="p-3 text-left flex gap-5">
               <ButtonIcon  icon="uil:trash-alt" onClick={() => alert(`Clicou na action da linha ${index}`)} />
-              <ButtonIcon  icon="icon-park-outline:doc-detail" onClick={() => alert(`Clicou na action da linha ${index}`)} />
+              <ButtonIcon  icon="icon-park-outline:doc-detail" onClick={() => handlerDetailsPurchaseRequest(purchaseRequest?.docentry)} />
             </td>
           </tr>
         ), []): null}

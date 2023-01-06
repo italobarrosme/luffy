@@ -7,6 +7,16 @@ export const getPurchaseRequests = async () => {
   })
 }
 
+export const getPurchaseRequestsDetails = async (id: any) => {
+  return await fetch({
+    method: "GET",
+    path: `/api/purchase-request/details`,
+    params: {
+      id
+    } 
+  })
+}
+
 export const getEmployees = async () => {
   return await fetch({
     method: "GET",
