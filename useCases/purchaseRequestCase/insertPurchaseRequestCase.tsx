@@ -118,7 +118,7 @@ export const InsertPurchaseRequestCase = () => {
         ): null}
       </Table>
       </div>
-      <FormSetItemsRequest emitItemsRequest={(ev) => handleAddItem(ev)} />
+      <FormSetItemsRequest emitObject={(ev) => handleAddItem(ev)} />
     </>
   )
 }

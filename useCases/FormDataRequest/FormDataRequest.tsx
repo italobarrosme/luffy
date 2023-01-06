@@ -15,9 +15,10 @@ export const FormDataRequest = ({emitDataRequest}:FormDataRequestProps) => {
   const { addToast } = useStoreListToast()
 
   
-  const [dateLaunch, setDateLaunch] = useState('')
-  const [dateFinish, setDateFinish] = useState('')
-  const [dateDocument, setDateDocument] = useState('')
+  const [taxDate, setTaxDate] = useState('')
+  const [docDueDate, setDocDueDate] = useState('')
+  const [docDate, setDocDate] = useState('')
+  const [requriedDate, setRequriedDate] = useState('')
   
   const [employees, setEmployees] = useState<any>([])
   const [affiliates, setAffiliates] = useState<any>([])
@@ -25,17 +26,19 @@ export const FormDataRequest = ({emitDataRequest}:FormDataRequestProps) => {
     value: '',
     label: ''
   })
+
+  const [documentData, setDocumentData] = useState<any>()
   
   const setDateNow = () => {
     const date = new Date()
     const nowDate = date.toISOString().split('T')[0]
     
-    const dateFinish = date.setDate(date.getDate() + 30)
-    const dateFinishFormat = new Date(dateFinish).toISOString().split('T')[0]
+    const dateDue= date.setDate(date.getDate() + 30)
+    const dateDueFormat = new Date(dateDue).toISOString().split('T')[0]
     
-    setDateLaunch(nowDate)
-    setDateFinish(dateFinishFormat)
-    setDateDocument(nowDate)
+    setTaxDate(nowDate)
+    setDocDueDate(dateDueFormat)
+    setDocDate(nowDate)
     
     return nowDate
   }
@@ -77,8 +80,11 @@ export const FormDataRequest = ({emitDataRequest}:FormDataRequestProps) => {
         }
       })
 
-      setEmployees(employees)
-      handleEmployees({target: {value: employees[0].value}})
+      setEmployees([{
+        value: '',
+        label: 'Selecione um funcionario'
+      }, ...employees])
+      
       
       return response
     }).catch((error) => {
@@ -105,7 +111,10 @@ export const FormDataRequest = ({emitDataRequest}:FormDataRequestProps) => {
         }
       })
 
-      setAffiliates(affiliates)
+      setAffiliates([{
+        value: '',
+        label: 'Selecione uma filial'
+      }, ...affiliates])
       
       return response
     }).catch((error) => {
@@ -122,11 +131,85 @@ export const FormDataRequest = ({emitDataRequest}:FormDataRequestProps) => {
     })
   }
 
-  const handleEmployees = (event: any) => {
+  const handlerEmployees = (event: any) => {
     GET_DEPARTMENT(event.target.value)
+    setDocumentData({
+      ...documentData,
+      EmployeeID: event.target.value
+    })
+
     return
   }
 
+  const handlerAffiliates = (event: any) => {
+    setDocumentData({
+      ...documentData,
+      BPL_IDAssignedToInvoice: event.target.value
+    })
+
+    return
+  }
+
+  const handlerDocDate = (event: any) => {
+
+    setDocumentData({
+      ...documentData,
+      DocDate: event.target.value
+    })
+
+    setDocDate(event.target.value)
+
+    return
+  }
+
+  const handlerDocDueDate = (event: any) => {
+    setDocumentData({
+      ...documentData,
+      DocDueDate: event.target.value
+    })
+
+    setDocDueDate(event.target.value)
+
+    return
+  }
+
+  const handlerRequriedDate = (event: any) => {
+    setDocumentData({
+      ...documentData,
+      RequiredDate: event.target.value
+    })
+
+    setRequriedDate(event.target.value)
+
+    return
+  }
+
+  const handlerTaxDate = (event: any) => {
+
+    
+    setDocumentData({
+      ...documentData,
+      TaxDate: event.target.value
+    })
+    setTaxDate(event.target.value)
+
+    return
+  }
+
+  const handlerComments = (event: any) => {
+
+    setDocumentData({
+      ...documentData,
+      Comments: event.target.value
+    })
+
+    return
+  }
+
+  useEffect(() => {
+    emitDataRequest(documentData)
+    console.log(documentData, 'OBJETO EMITIDO')
+  }, [documentData])
 
   useEffect(() => {
     setDateNow()
@@ -142,20 +225,20 @@ export const FormDataRequest = ({emitDataRequest}:FormDataRequestProps) => {
             Dados para solicitação
           </h2>
           <div className="flex items-center gap-4">
-            <SelectInput label="Solicitante" name={'resquester'} options={employees} onChange={(ev) => handleEmployees(ev)}  />
+            <SelectInput label="Solicitante" name={'resquester'} options={employees} onChange={(ev) => handlerEmployees(ev)}  />
             <InputText label="Departamento" name={'departament'} value={department.label} readOnly />
-            <SelectInput label="Filial" name={'fileia'} options={affiliates} />
+            <SelectInput label="Filial" name={'fileia'} options={affiliates} onChange={(ev) => handlerAffiliates(ev)} />
           </div>
           <div className="flex items-center gap-4">
-            <InputDate label="Data de Lançamento" name={'dateSend'} defaultValue={dateLaunch} />
-            <InputDate label="Valida Ate" name={'dateFinish'} defaultValue={dateFinish} />
-            <InputDate label="Data do Documento" name={'dateDocument'} defaultValue={dateDocument} />
+            <InputDate label="Data de Lançamento" name={'TaxDate'} value={taxDate} onChange={(ev) => handlerTaxDate(ev)} />
+            <InputDate label="Valida Ate" name={'DocDueDate'} value={docDueDate}  onChange={(ev) => handlerDocDueDate(ev)} />
+            <InputDate label="Data do Documento" name={'DocDate'}  value={docDate}  onChange={(ev) => handlerDocDate(ev)}  />
           </div>
           <div className="flex items-center gap-4">
-            <InputDate label="Data Necessaria" name="dateSend" />
+            <InputDate label="Data Necessaria" name={'RequriedDate'} defaultValue={requriedDate} onChange={(ev) => handlerRequriedDate(ev)}  />
           </div>
           <div className="flex items-center gap-4">
-            <InputText label="Observações" name={'description'} defaultValue={'0000-00-00'} />
+            <InputText label="Observações" name={'Comments'} defaultValue={''} onChange={(ev) => handlerComments(ev)} />
           </div>
         </div>
       </div>
