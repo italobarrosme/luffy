@@ -13,12 +13,11 @@ export default function handler(
         Cookie: `B1SESSION=${req.cookies['B1SESSION']}`
       }
     })
-   // return error if response is not ok
-    if (response.status !== 200) {
-      return res.status(response.status).json(response.data)
+    try {
+      return res.status(200).json(response.data)
+    } catch (error) {
+      return res.status(400).json({ error })
     }
-
-    return res.status(200).json(response.data)
 
 }
   const { id } = req.query

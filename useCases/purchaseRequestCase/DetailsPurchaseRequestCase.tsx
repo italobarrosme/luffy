@@ -12,10 +12,12 @@ import { useEffect, useState } from "react"
 export const DetailsPurchaseRequestCase = () => {
 
   const router = useRouter()
+  const { id } = router.query
+
   const { addToast } = useStoreListToast()
   const [detailsPurchaseRequest, setDetailsPurchaseRequest] = useState<any>()
 
-  const { setLoading } = useStoreLoading()
+  const { setLoading, store } = useStoreLoading()
 
   const headers = [
     {
@@ -29,10 +31,6 @@ export const DetailsPurchaseRequestCase = () => {
     {
       title: 'Descrição do item',
       fn: () => console.log('Descrição do item')
-    },
-    {
-      title: 'Unidade de medida',
-      fn: () => console.log('Unidade de medida')
     },
     {
       title: 'Quantidade',
@@ -58,9 +56,9 @@ export const DetailsPurchaseRequestCase = () => {
   }
 
   const GET_PURCHASE_REQUEST_DETAILS = (id: any) => {
-    setLoading(true)
-
+    
     getPurchaseRequestsDetails(id).then((response) => {
+      setLoading(true)
 
       const adpterPurchaseRequestsDetails = {
           affiliate: response.data?.BPLName,
@@ -76,7 +74,9 @@ export const DetailsPurchaseRequestCase = () => {
           requriedDate: response.data?.RequriedDate,
           taxDate: response.data?.TaxDate,
 
-        }
+      }
+      
+      console.log(store, 'store')
 
       setDetailsPurchaseRequest(adpterPurchaseRequestsDetails)
       
@@ -102,9 +102,10 @@ export const DetailsPurchaseRequestCase = () => {
   
 
   useEffect(() => {
-    const { id } = router.query
-    GET_PURCHASE_REQUEST_DETAILS(id)
-  }, [])
+    if (id) {
+      GET_PURCHASE_REQUEST_DETAILS(id)
+    }
+  }, [id])
 
 
 
@@ -141,13 +142,10 @@ export const DetailsPurchaseRequestCase = () => {
               {itemsRequest.ItemCode}
               </td>
               <td className="p-3 text-left" >
-                {itemsRequest.Item}
+                {itemsRequest.Item || 'Nome não retornado'}
               </td>
               <td className="p-3 text-left">
                 {itemsRequest.ItemDescription}
-              </td>
-              <td className="p-3 text-left">
-                {itemsRequest.unitMeasure || 'Nao sei de onde vem esse dado'}
               </td>
               <td className="p-3 text-left">
                 {itemsRequest.Quantity}
