@@ -33,7 +33,7 @@ export const FormDataRequest = ({emitDataRequest}:FormDataRequestProps) => {
     const date = new Date()
     const nowDate = date.toISOString().split('T')[0]
     
-    const dateDue= date.setDate(date.getDate() + 30)
+    const dateDue= date.setMonth(date.getMonth() + 1)
     const dateDueFormat = new Date(dateDue).toISOString().split('T')[0]
     
     setTaxDate(nowDate)
