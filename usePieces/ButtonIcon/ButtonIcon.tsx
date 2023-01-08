@@ -4,9 +4,11 @@ export type ButtonIconProps = {
   label?: string
   icon: string
   onClick: () => void
+  width?: number
+  height?: number
 }
 
-export const ButtonIcon = ({onClick, label, icon}: ButtonIconProps) => {
+export const ButtonIcon = ({onClick, label, icon, height = 24, width = 24}: ButtonIconProps) => {
   return (
     <>
         <button
@@ -18,7 +20,7 @@ export const ButtonIcon = ({onClick, label, icon}: ButtonIconProps) => {
           {label ? <label htmlFor="buttonIcon" className='font-bold'>
           {label}
           </label> : null} 
-          <Icon icon={icon} width={24} height={24} />
+          <Icon icon={icon} width={width} height={height} />
         </button>
     </>
   )

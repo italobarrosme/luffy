@@ -10,7 +10,7 @@ export type itemsHeader = {
 }
 
 export type TableProps = {
-  title: string
+  title?: string
   headerItems: itemsHeader[]
   children: ReactNode
   onChangeSearch?: (event: ChangeEvent<HTMLInputElement>) => void
@@ -31,16 +31,16 @@ export const Table = ({title, headerItems, children, onChangeSearch, actionHeadB
       <div className="overflow-x-auto overflow-y-auto rounded-lg h-auto">
         <table className="text-xs w-full">
           <thead>
-            <tr className="border-b border-gray-200 bg-brand-primary text-brand-light">
+            <tr className="border-b border-gray-200 bg-brand-secondary text-brand-light">
               {headerItems?.map((item) => (
                 <th key={item.title} className="p-3 font-semibold text-left">
                   <p className='flex items-center gap-1'>
                   {item.title}
-                  <span>
+                  {item.title && <span>
                     <button onClick={item.fn}>
                       <Icon icon='ic:baseline-expand-more' width={18} />
                     </button>
-                  </span>
+                  </span>}
                   </p>
                 </th>
               ))}

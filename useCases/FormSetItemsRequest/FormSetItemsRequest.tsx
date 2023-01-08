@@ -1,10 +1,14 @@
 import { useNoAuthorized } from "@/hooks/useNoAuthorized"
 import { getProjects, getProfitCenters } from "@/services/purchase-request/usePurchaseRequest"
 import { useStoreListToast } from "@/store/useStoreListToast"
+import { useStoreModal } from "@/store/useStoreModal"
+import { Modal } from "@/useComponents/Modal"
 import { Button } from "@/usePieces/Button"
 import { InputText } from "@/usePieces/InputText"
 import { SelectInput } from "@/usePieces/SelectInput"
 import { useEffect, useState } from "react"
+import { SearchItems } from "../SearchItems"
+import { ButtonIcon } from "@/usePieces/ButtonIcon"
 
 export type FormSetItemsRequestProps = {
   emitObject: (object: any) => void
@@ -19,9 +23,14 @@ export const FormSetItemsRequest = ({emitObject}:FormSetItemsRequestProps) => {
   const [profitCenter1, setProfitCenter1] = useState<any>([])
   const [profitCenter2, setProfitCenter2] = useState<any>([])
 
-  const [item, setItem] = useState<any>('ITEM FALTA API')
+  const [item, setItem] = useState<any>({
+    ItemCode: '',
+    ItemName: '',
+  })
   
   const { addToast } = useStoreListToast()
+
+  const { setModal } = useStoreModal()
 
   const GET_PROFITCENTER = () => {
     getProfitCenters().then((response) => {
@@ -94,7 +103,7 @@ export const FormSetItemsRequest = ({emitObject}:FormSetItemsRequestProps) => {
     GET_PROFITCENTER()
 
     handlerItem()
-  }, [])
+  }, [item])
 
 
   const handlerProject = (event: any) => {
@@ -110,15 +119,6 @@ export const FormSetItemsRequest = ({emitObject}:FormSetItemsRequestProps) => {
     setDocumentLines({
       ...DocumentLines,
       Quantity: event.target.value
-    })
-
-    return
-  }
-
-  const handlerItemCode = (event: any) => {
-    setDocumentLines({
-      ...DocumentLines,
-      ItemCode: event.target.value
     })
 
     return
@@ -164,17 +164,32 @@ export const FormSetItemsRequest = ({emitObject}:FormSetItemsRequestProps) => {
     emitObject(DocumentLines)
   }
 
+  const openModalSearchItem = () => {
+    setModal({
+      isOpen: true,
+      role: 'SearchItem'
+    })
+  }
+
+  const handlerItemModal = (item: any) => {
+    setItem(item)
+  }
+
   return (
-    <div>
+    <>
+      <div>
         <h2 className="text-2xl font-semibold leading-tight w-full my-4">Registrar itens</h2>
         <div className="flex flex-col bg-brand-primary p-8 rounded-lg gap-4 text-white">
-          <h2 className="text-lg font-semibold leading-tight w-full mb-4">
-            Informações dos itens
-          </h2>
+          <div className="flex gap-4">
+            <h2 className="text-lg font-semibold leading-tight w-full mb-4">
+              Informações dos itens
+            </h2>
+          </div>
             <div className="flex items-center gap-4">
-              <InputText className="w-36" label="Código do produto" name={'ItemCode'} defaultValue={''} onChange={handlerItemCode} />
-              <InputText className="w-55"  label="Item" name={'Item'} value={item} readOnly/>
-              <InputText className="w-80"  label="Descrição do item" name={'ItemDescription'} defaultValue={''} onChange={handlerDescription} />
+              <ButtonIcon  icon="ic:round-screen-search-desktop" onClick={() => openModalSearchItem()} />
+              <InputText className="w-36" label="Código do produto" name={'ItemCode'} value={item.ItemCode} readOnly />
+              <InputText className="w-55"  label="Item" name={'Item'} value={item.ItemName} readOnly/>
+              <InputText className="w-80"  label="Descrição do item" name={'ItemDescription'} onChange={handlerDescription} />
               
             </div>
             <div className="flex items-center gap-4">
@@ -188,5 +203,10 @@ export const FormSetItemsRequest = ({emitObject}:FormSetItemsRequestProps) => {
             </div>
         </div>
       </div>
+      <Modal role="SearchItem" title={'Buscar item'}>
+        <SearchItems emitItem={(el) => handlerItemModal(el)} />
+      </Modal>
+    </>
+
   )
 }
