@@ -10,11 +10,12 @@ function App({ Component, pageProps: { session, ...pageProps } }: AppProps) {
 
   return (
     <>
-    {<ListToast position={data.position} list={data.list} />}
-    <SessionProvider session={session}>
+      {<ListToast position={data.position} list={data.list} />}
+      <SessionProvider session={session}>
         <Component {...pageProps} />
-    </SessionProvider>
+      </SessionProvider>/
     </>
+
   )
 }
 

@@ -47,10 +47,6 @@ export const InsertPurchaseRequestCase = () => {
       fn: () => console.log('Descrição do item')
     },
     {
-      title: 'Unidade de medida',
-      fn: () => console.log('Unidade de medida')
-    },
-    {
       title: 'Quantidade',
       fn: () => console.log('Quantidade')
     },
@@ -94,9 +90,6 @@ export const InsertPurchaseRequestCase = () => {
             </td>
             <td className="p-3 text-left">
               {itemsRequest.ItemDescription}
-            </td>
-            <td className="p-3 text-left">
-              {itemsRequest.unitMeasure || 'Nao sei de onde vem esse dado'}
             </td>
             <td className="p-3 text-left">
               {itemsRequest.Quantity}

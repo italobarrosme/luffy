@@ -17,6 +17,16 @@ export const getPurchaseRequestsDetails = async (id: any) => {
   })
 }
 
+export const postPurchaseRequestsCancel = async (id: any) => {
+  return await fetch({
+    method: "POST",
+    path: `/api/purchase-request/cancel`,
+    params: {
+      id
+    } 
+  })
+}
+
 export const getEmployees = async () => {
   return await fetch({
     method: "GET",

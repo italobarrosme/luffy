@@ -1,3 +1,3 @@
-export { PurchaseRequestCase } from './purchaseRequestCase'
-export { InsertPurchaseRequestCase} from './insertPurchaseRequestCase'
+export { PurchaseRequestCase } from './PurchaseRequestCase'
+export { InsertPurchaseRequestCase} from './InsertPurchaseRequestCase'
 export { DetailsPurchaseRequestCase } from './DetailsPurchaseRequestCase'

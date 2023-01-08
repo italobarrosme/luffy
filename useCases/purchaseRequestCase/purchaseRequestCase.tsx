@@ -1,25 +1,27 @@
 import { Pagination } from "@/useComponents/Pagination"
 import { Table } from "@/useComponents/Table"
 import { useEffect, useState } from "react"
-import { getPurchaseRequests } from "@/services/purchase-request/usePurchaseRequest"
+import { getPurchaseRequests, postPurchaseRequestsCancel  } from "@/services/purchase-request/usePurchaseRequest"
 import { formatDepartament, formatStatus, formatCanceled } from '@/utils/formatData'
 
 import { useNoAuthorized } from "@/hooks/useNoAuthorized"
 import { ButtonIcon } from "@/usePieces/ButtonIcon"
 import { useStoreListToast } from "@/store/useStoreListToast"
 import { useRouter } from "next/router"
+import { useStoreLoading } from "@/store/useStoreLoading"
 
 export const PurchaseRequestCase = () => {
 
   const router = useRouter()
 
   const { addToast } = useStoreListToast()
+  const { setLoading } = useStoreLoading()
   const [currentPage, setCurrentPage] = useState(1)
   const [purchaseRequests, setPurchaseRequests] = useState<any>([])
 
   const GET_PURCHASEREQUESTS = () => {
     getPurchaseRequests().then((response) => {
-      console.log(response.data.value, 'response.data.value')
+      setLoading(true)
       const adpterPurchaseRequests = response.data.value.map((purchaseRequest: any) => {
         return {
           cancelled: purchaseRequest?.Cancelled,
@@ -45,8 +47,40 @@ export const PurchaseRequestCase = () => {
       })
 
       useNoAuthorized(responseStatus)
+    }).finally(() => {
+      setLoading(false)
     })
     
+  }
+
+  const POST_PURCHASEREQUESTS_CANCEL = (docentry: any) => {
+    postPurchaseRequestsCancel(docentry).then((response) => {
+      setLoading(true)
+
+      if (response.status === 204) {
+        addToast({
+          type: 'success',
+          title: `Solicitação de compra`,
+          message: `Solicitação de compra cancelada com sucesso`,
+          duration: 8000
+        })
+  
+        GET_PURCHASEREQUESTS()
+      }
+    }).catch((error) => {
+      const { status: responseStatus, statusText } = error.response
+
+      addToast({
+        type: 'error',
+        title: `Error ${responseStatus}`,
+        message: `Erro ao cancelar solicitação de compra, ${statusText}`,
+        duration: 8000
+      })
+
+      useNoAuthorized(responseStatus)
+    }).finally(() => {
+      setLoading(false)
+    })
   }
 
   const headers = [
@@ -86,10 +120,6 @@ export const PurchaseRequestCase = () => {
     
   }, [])
 
-  const handlerDetailsDocument = (docentry: any) => {
-    alert('Clicou no botão de detalhes')
-  }
-
   const handleCurrentPage = (currentPage: number) => {
     setCurrentPage(currentPage)
   }
@@ -121,6 +151,10 @@ export const PurchaseRequestCase = () => {
     })
   }
 
+  const handleDeletePurchaseRequest = (id: any) => {
+    POST_PURCHASEREQUESTS_CANCEL(id)
+  }
+
 
 
   return (
@@ -129,7 +163,7 @@ export const PurchaseRequestCase = () => {
         {purchaseRequests ? purchaseRequests?.map((purchaseRequest: any, index: any) => (
           <tr key={index} className="border-b border-gray-200 bg-gray-300">
             <td className="p-3 flex items-center gap-2">
-              <span className="cursor-pointer hover:underline" onClick={(ev) => handlerDetailsDocument(ev)}>{purchaseRequest?.docnum}</span>
+              <span>{purchaseRequest?.docnum}</span>
             </td>
             <td className="p-3 text-left" >
               {purchaseRequest?.requesterName}
@@ -147,7 +181,7 @@ export const PurchaseRequestCase = () => {
               {formatCanceled(purchaseRequest?.cancelled)}
             </td>
             <td className="p-3 text-left flex gap-5">
-              <ButtonIcon  icon="uil:trash-alt" onClick={() => alert(`Clicou na action da linha ${index}`)} />
+              <ButtonIcon  icon="uil:trash-alt" onClick={() => handleDeletePurchaseRequest(purchaseRequest?.docentry)} />
               <ButtonIcon  icon="icon-park-outline:doc-detail" onClick={() => handlerDetailsPurchaseRequest(purchaseRequest?.docentry)} />
             </td>
           </tr>

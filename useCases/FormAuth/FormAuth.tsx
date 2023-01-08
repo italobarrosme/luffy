@@ -5,14 +5,14 @@ import { FormEventHandler, useState} from 'react';
 export const FormAuth = () => {
 
   const [userInfo, setUserInfo] = useState({ user: "", password: "" });
-  const handleSubmit: FormEventHandler<HTMLFormElement> = async (e) => {
+  const handleSubmit: FormEventHandler<HTMLFormElement> = (e) => {
 
     e.preventDefault();
 
-    await signIn("credentials", {
+    signIn("credentials", {
       user: userInfo.user,
       pass: userInfo.password,
-    });
+    })
   };
 
   return (

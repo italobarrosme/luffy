@@ -1,10 +1,11 @@
 import { useNoAuthorized } from "@/hooks/useNoAuthorized"
 import { getPurchaseRequestsDetails } from "@/services/purchase-request/usePurchaseRequest"
 import { useStoreListToast } from "@/store/useStoreListToast"
+import { useStoreLoading } from "@/store/useStoreLoading"
 import { Table } from "@/useComponents/Table"
 import { InputDate } from "@/usePieces/InputDate"
 import { InputText } from "@/usePieces/InputText"
-import { SelectInput } from "@/usePieces/SelectInput"
+
 import { useRouter } from "next/router"
 import { useEffect, useState } from "react"
 
@@ -13,6 +14,8 @@ export const DetailsPurchaseRequestCase = () => {
   const router = useRouter()
   const { addToast } = useStoreListToast()
   const [detailsPurchaseRequest, setDetailsPurchaseRequest] = useState<any>()
+
+  const { setLoading } = useStoreLoading()
 
   const headers = [
     {
@@ -55,8 +58,10 @@ export const DetailsPurchaseRequestCase = () => {
   }
 
   const GET_PURCHASE_REQUEST_DETAILS = (id: any) => {
+    setLoading(true)
 
     getPurchaseRequestsDetails(id).then((response) => {
+
       const adpterPurchaseRequestsDetails = {
           affiliate: response.data?.BPLName,
           cancelled: response.data?.Cancelled,
@@ -74,8 +79,6 @@ export const DetailsPurchaseRequestCase = () => {
         }
 
       setDetailsPurchaseRequest(adpterPurchaseRequestsDetails)
-
-      console.log(adpterPurchaseRequestsDetails, 'adpterPurchaseRequests')
       
       return response
     }).catch((error) => {
@@ -89,6 +92,8 @@ export const DetailsPurchaseRequestCase = () => {
       })
 
       useNoAuthorized(responseStatus)
+    }).finally(() => {
+      setLoading(false)
     })
   }
 

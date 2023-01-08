@@ -37,6 +37,7 @@ export function fetch({
   ...data
 }: FetchParams): Promise<AxiosResponse> {
 
+
   return axiosInstance({
     ...data,
     headers: {
