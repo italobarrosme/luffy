@@ -1,6 +1,6 @@
 import type { NextPage } from 'next'
 import DefaultLayout from '@/layouts/DefaultLayout'
-import { InsertPurchaseRequestCase } from '@/useCases/PurchaseRequestCase/InsertPurchaseRequestCase'
+import { InsertPurchaseRequestCase } from '@/useCases/PurchaseRequest/InsertPurchaseRequestCase'
 
 const InsertPurchaseRequest: NextPage = () => {
   return (
