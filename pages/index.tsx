@@ -10,12 +10,14 @@ const Home: NextPage = () => {
   const router = useRouter();
 
   useEffect(() => {
-    if (status === 'authenticated') {
-      router.push('/purchase-request')
-    } else {
-      router.push('/auth')
-    } 
-  }, [status])
+    if(status !== 'loading') {
+      if (status === 'authenticated') {
+        router.push('/purchase-request')
+      } else {
+        router.push('/auth')
+      } 
+    }
+  }, [status, router])
 
   return (
     <>
