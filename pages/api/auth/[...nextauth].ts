@@ -1,14 +1,16 @@
 import NextAuth from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import { fetch } from '@/services/axios';
-import getConfig from 'next/config';
+import getPublicRuntimeConfig from 'next/config'
+
 
 type credentialsProps = {
   user: string;
   pass: string;
 };
 
-const { publicRuntimeConfig } = getConfig()
+
+const { publicRuntimeConfig } = getPublicRuntimeConfig()
 
 export default NextAuth({
   providers: [
@@ -26,7 +28,7 @@ export default NextAuth({
 
         const response = await fetch({
           method: 'POST',
-          path: `${process.env.NEXTAUTH_URL}/api/login`,
+          path: `${publicRuntimeConfig.NEXTAUTH_URL}/api/login`,
           data: {
             user,
             pass,

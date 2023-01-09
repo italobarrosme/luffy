@@ -1,13 +1,12 @@
 /** @type {import('next').NextConfig} */
 
-const basePath = '/'
-
 const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
-  basePath,
   publicRuntimeConfig: {
-    basePath,
+    API_URL: process.env.API_URL,
+    JWT_SECRET: process.env.JWT_SECRET,
+    NEXTAUTH_URL: process.env.NEXTAUTH_URL,
     staticFolder: '/static',
   },
 }
