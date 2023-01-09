@@ -6,7 +6,7 @@ export default function handler(
   req: NextApiRequest,
   res: NextApiResponse<any>,
 ) {
-  const useAffiliateFetch = async () => {
+  const AffiliateFetch = async () => {
     const response = await fetch({
       path: '/BusinessPlaces?$select=BPLID,BPLName',
       headers: {
@@ -17,5 +17,5 @@ export default function handler(
   
   return res.json(response.data)
 }
-  return useAffiliateFetch()
+  return AffiliateFetch()
 }

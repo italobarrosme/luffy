@@ -6,7 +6,7 @@ export default function handler(
   req: NextApiRequest,
   res: NextApiResponse<any>,
 ) {
-  const usePurchaseRequestsFetch = async () => {
+  const PurchaseRequestsFetch = async () => {
     const response = await fetch({
       path: '/PurchaseRequests?$select=DocEntry,DocNum,Cancelled,DocumentStatus,RequesterName,RequesterDepartment,Comments',
       headers: {
@@ -17,5 +17,5 @@ export default function handler(
   
   return res.json(response.data)
 }
-  return usePurchaseRequestsFetch()
+  return PurchaseRequestsFetch()
 }

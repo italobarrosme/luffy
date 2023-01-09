@@ -6,7 +6,7 @@ export default function handler(
   req: NextApiRequest,
   res: NextApiResponse<any>,
 ) {
-  const usePurchaseRequestsCancelFetch = async (id: any) => {
+  const PurchaseRequestsCancelFetch = async (id: any) => {
     const response = await fetch({
       path: `/PurchaseRequests(${id})/Cancel`,
       headers: {
@@ -22,5 +22,5 @@ export default function handler(
 }
   const { id } = req.query
 
-  return usePurchaseRequestsCancelFetch(id)
+  return PurchaseRequestsCancelFetch(id)
 }

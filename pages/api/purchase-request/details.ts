@@ -6,7 +6,7 @@ export default function handler(
   req: NextApiRequest,
   res: NextApiResponse<any>,
 ) {
-  const usePurchaseRequestsDetailsFetch = async (id: any) => {
+  const PurchaseRequestsDetailsFetch = async (id: any) => {
     const response = await fetch({
       path: `/PurchaseRequests(${id})`,
       headers: {
@@ -23,5 +23,5 @@ export default function handler(
 }
   const { id } = req.query
 
-  return usePurchaseRequestsDetailsFetch(id)
+  return PurchaseRequestsDetailsFetch(id)
 }

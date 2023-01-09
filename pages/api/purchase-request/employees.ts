@@ -6,7 +6,7 @@ export default function handler(
   req: NextApiRequest,
   res: NextApiResponse<any>,
 ) {
-  const useEmployeesFetch = async () => {
+  const EmployeesFetch = async () => {
     const response = await fetch({
       path: '/EmployeesInfo',
       headers: {
@@ -17,5 +17,5 @@ export default function handler(
   
   return res.json(response.data)
 }
-  return useEmployeesFetch()
+  return EmployeesFetch()
 }

@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import NextAuth from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import { fetch } from '@/services/axios';
@@ -25,7 +23,7 @@ export default NextAuth({
 
         const response = await fetch({
           method: 'POST',
-          path: 'http://localhost:3000/api/login',
+          path: `${process.env.NEXTAUTH_URL}/api/login`,
           data: {
             user,
             pass,

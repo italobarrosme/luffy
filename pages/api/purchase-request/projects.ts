@@ -6,7 +6,7 @@ export default function handler(
   req: NextApiRequest,
   res: NextApiResponse<any>,
 ) {
-  const useProjectsFetch = async () => {
+  const ProjectsFetch = async () => {
     const response = await fetch({
       path: '/Projects?$select=Code,Name',
       headers: {
@@ -17,5 +17,5 @@ export default function handler(
   
   return res.json(response.data)
 }
-  return useProjectsFetch()
+  return ProjectsFetch()
 }

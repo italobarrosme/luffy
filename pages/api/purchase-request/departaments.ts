@@ -7,7 +7,7 @@ export default function handler(
   res: NextApiResponse<any>,
 ) {
 
-  const useDepartamentsFetch = async (id: any) => {
+  const DepartamentsFetch = async (id: any) => {
     const response = await fetch({
       path: `/Departments(${id})`,
       headers: {
@@ -20,5 +20,5 @@ export default function handler(
   
   const { id } = req.query
 
-  return useDepartamentsFetch(id)
+  return DepartamentsFetch(id)
 }

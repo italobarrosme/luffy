@@ -14,7 +14,7 @@ export default function handler(
   res: NextApiResponse
 ) {
 
-  const useFetch = async () => {
+  const LoginFetch = async () => {
     
     const { user, pass } = req.body
 
@@ -36,6 +36,6 @@ export default function handler(
   
 }
 
- return useFetch()
+ return LoginFetch()
 
 }

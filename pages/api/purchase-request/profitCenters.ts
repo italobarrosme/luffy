@@ -6,7 +6,7 @@ export default function handler(
   req: NextApiRequest,
   res: NextApiResponse<any>,
 ) {
-  const useProfitCentersFetch = async () => {
+  const ProfitCentersFetch = async () => {
     const response = await fetch({
       path: '/ProfitCenters?$select=CenterCode,Active,InWhichDimension,CenterName',
       headers: {
@@ -17,5 +17,5 @@ export default function handler(
   
   return res.json(response.data)
 }
-  return useProfitCentersFetch()
+  return ProfitCentersFetch()
 }
