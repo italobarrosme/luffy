@@ -1,11 +1,14 @@
 import NextAuth from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import { fetch } from '@/services/axios';
+import getConfig from 'next/config';
 
 type credentialsProps = {
   user: string;
   pass: string;
 };
+
+const { publicRuntimeConfig } = getConfig()
 
 export default NextAuth({
   providers: [
