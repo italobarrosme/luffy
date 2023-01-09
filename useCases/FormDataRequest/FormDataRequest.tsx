@@ -5,6 +5,7 @@ import { ChangeEvent, useEffect, useState } from "react"
 import { getAffiliate, getEmployees, getDepartments } from "@/services/purchase-request/usePurchaseRequest"
 import { useStoreListToast } from "@/store/useStoreListToast"
 import { useNoAuthorized } from "@/hooks/useNoAuthorized"
+import { useStoreLoading } from "@/store/useStoreLoading"
 
 export type FormDataRequestProps = {
   emitDataRequest: (data: any) => void
@@ -13,7 +14,7 @@ export type FormDataRequestProps = {
 
 export const FormDataRequest = ({emitDataRequest}:FormDataRequestProps) => {
   const { addToast } = useStoreListToast()
-
+  const { setLoading, store } = useStoreLoading()
   
   const [taxDate, setTaxDate] = useState('')
   const [docDueDate, setDocDueDate] = useState('')
@@ -45,6 +46,7 @@ export const FormDataRequest = ({emitDataRequest}:FormDataRequestProps) => {
 
   const GET_DEPARTMENT = (id: any) => {
     getDepartments(id).then((response) => {
+      setLoading(true)
       const { data } = response
       const department = 
         {
@@ -67,11 +69,14 @@ export const FormDataRequest = ({emitDataRequest}:FormDataRequestProps) => {
       })
 
       useNoAuthorized(responseStatus)
+    }).finally(() => {
+      setLoading(false)
     })
   }
 
   const GET_EMPLOYEES = () => {
     getEmployees().then((response) => {
+      setLoading(true)
       const { data } = response
       const employees = data.value.map((employee: any) => {
         return {
@@ -98,11 +103,14 @@ export const FormDataRequest = ({emitDataRequest}:FormDataRequestProps) => {
       })
 
       useNoAuthorized(responseStatus)
+    }).finally(() => {
+      setLoading(false)
     })
   }
 
   const GET_AFFILIATE = () => {
     getAffiliate().then((response) => {
+      setLoading(true)
       const { data } = response
       const affiliates = data.value.map((affiliate: any) => {
         return {
@@ -128,6 +136,8 @@ export const FormDataRequest = ({emitDataRequest}:FormDataRequestProps) => {
       })
 
       useNoAuthorized(responseStatus)
+    }).finally(() => {
+      setLoading(false)
     })
   }
 
@@ -208,7 +218,6 @@ export const FormDataRequest = ({emitDataRequest}:FormDataRequestProps) => {
 
   useEffect(() => {
     emitDataRequest(documentData)
-    console.log(documentData, 'OBJETO EMITIDO')
   }, [documentData])
 
   useEffect(() => {

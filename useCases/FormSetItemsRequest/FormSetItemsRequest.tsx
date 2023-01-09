@@ -9,11 +9,11 @@ import { SelectInput } from "@/usePieces/SelectInput"
 import { useEffect, useState } from "react"
 import { SearchItems } from "../SearchItems"
 import { ButtonIcon } from "@/usePieces/ButtonIcon"
+import { useStoreLoading } from "@/store/useStoreLoading"
 
 export type FormSetItemsRequestProps = {
   emitObject: (object: any) => void
 }
-
 
 export const FormSetItemsRequest = ({emitObject}:FormSetItemsRequestProps) => {
   
@@ -22,6 +22,8 @@ export const FormSetItemsRequest = ({emitObject}:FormSetItemsRequestProps) => {
   const [DocumentLines, setDocumentLines] = useState<any>([])
   const [profitCenter1, setProfitCenter1] = useState<any>([])
   const [profitCenter2, setProfitCenter2] = useState<any>([])
+
+  const { setLoading, store } = useStoreLoading()
 
   const [item, setItem] = useState<any>({
     ItemCode: '',
@@ -34,6 +36,7 @@ export const FormSetItemsRequest = ({emitObject}:FormSetItemsRequestProps) => {
 
   const GET_PROFITCENTER = () => {
     getProfitCenters().then((response) => {
+      setLoading(true)
       const { data } = response
       
       
@@ -65,11 +68,14 @@ export const FormSetItemsRequest = ({emitObject}:FormSetItemsRequestProps) => {
       })
 
       useNoAuthorized(responseStatus)
+    }).finally(() => {
+      setLoading(false)
     })
   }
 
   const GET_PROJECT = () => {
     getProjects().then((response) => {
+      setLoading(true)
       const { data } = response
       const projects = data.value.map((project: any) => {
         return {
@@ -95,6 +101,8 @@ export const FormSetItemsRequest = ({emitObject}:FormSetItemsRequestProps) => {
       })
 
       useNoAuthorized(responseStatus)
+    }).finally(() => {
+      setLoading(false)
     })
   }
 

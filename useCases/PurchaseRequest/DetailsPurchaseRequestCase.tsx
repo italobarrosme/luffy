@@ -1,5 +1,5 @@
 import { useNoAuthorized } from "@/hooks/useNoAuthorized"
-import { getPurchaseRequestsDetails } from "@/services/purchase-request/usePurchaseRequest"
+import { getDepartments, getPurchaseRequestsDetails } from "@/services/purchase-request/usePurchaseRequest"
 import { useStoreListToast } from "@/store/useStoreListToast"
 import { useStoreLoading } from "@/store/useStoreLoading"
 import { Table } from "@/useComponents/Table"
@@ -16,8 +16,38 @@ export const DetailsPurchaseRequestCase = () => {
 
   const { addToast } = useStoreListToast()
   const [detailsPurchaseRequest, setDetailsPurchaseRequest] = useState<any>()
+  const [department, setDepartment] = useState<any>('')
 
-  const { setLoading, store } = useStoreLoading()
+  const { setLoading } = useStoreLoading()
+
+  const GET_DEPARTMENT = (id: any) => {
+    getDepartments(id).then((response) => {
+      setLoading(true)
+      const { data } = response
+      const department = 
+        {
+          label: data.Name
+        }
+
+        setDepartment(department)
+      
+      return response
+    
+    }).catch((error) => {
+      const { status: responseStatus, statusText } = error.response
+
+      addToast({
+        type: 'error',
+        title: `Error ${responseStatus}`,
+        message: `Erro ao buscar departamentos, ${statusText}`,
+        duration: 8000
+      })
+
+      useNoAuthorized(responseStatus)
+    }).finally(() => {
+      setLoading(false)
+    })
+  }
 
   const headers = [
     {
@@ -55,8 +85,7 @@ export const DetailsPurchaseRequestCase = () => {
     return date.split('T')[0]
   }
 
-  const GET_PURCHASE_REQUEST_DETAILS = (id: any) => {
-    
+  const GET_PURCHASE_REQUEST_DETAILS = (id: any) => {   
     getPurchaseRequestsDetails(id).then((response) => {
       setLoading(true)
 
@@ -76,9 +105,10 @@ export const DetailsPurchaseRequestCase = () => {
 
       }
       
-      console.log(store, 'store')
 
       setDetailsPurchaseRequest(adpterPurchaseRequestsDetails)
+
+      GET_DEPARTMENT(response.data?.RequesterDepartment)
       
       return response
     }).catch((error) => {
@@ -119,7 +149,7 @@ export const DetailsPurchaseRequestCase = () => {
           </h2>
           <div className="flex items-center gap-4">
             <InputText label="Solicitante" name={'requesterName'} value={detailsPurchaseRequest.requesterName} readOnly   />
-            <InputText label="Departamento" name={'departament'} value={detailsPurchaseRequest.requesterDepertment} readOnly />
+            <InputText label="Departamento" name={'departament'} value={department?.label} readOnly />
             <InputText label="Filial" name={'fileia'} value={detailsPurchaseRequest.affiliate} readOnly />
           </div>
           <div className="flex items-center gap-4">

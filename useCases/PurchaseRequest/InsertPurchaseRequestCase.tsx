@@ -3,10 +3,23 @@ import { Table } from "@/useComponents/Table"
 
 import { FormSetItemsRequest } from "../FormSetItemsRequest"
 import { FormDataRequest } from "../FormDataRequest"
+import { Button } from "@/usePieces/Button"
 
 export const InsertPurchaseRequestCase = () => {
   
   const [itemsRequest, setItemsRequest] = useState<any>([])
+
+  const [dataRequest, setDataRequest] = useState<any>({
+    DocDate: '',
+    DocDueDate: '',
+    TaxDate: '',
+    Comments: '',
+    BPL_IDAssignedToInvoice: '',
+    RequriedDate: '',
+    Resquester: '',
+    DocumentLines: [
+    ]
+  })
 
   const headers = [
     {
@@ -39,20 +52,30 @@ export const InsertPurchaseRequestCase = () => {
     },
   ]
 
-  const handleAddItem = (item: any) => {
-    console.log(item, 'ITEM')
-
+  const handlerAddItem = (item: any) => {
     setItemsRequest([...itemsRequest, item])
+
+
+    console.log('hereeeee')
+    setDataRequest({
+      ...dataRequest,
+      DocumentLines: [...dataRequest.DocumentLines, {
+        ItemCode: item.Item.ItemCode,
+        ShipDate: dataRequest.DocDate,
+      }]
+    })
   }
 
-  const handleDataRequest = (data: any) => {
-    console.log(data, 'DATA')
+  const handlerDataRequest = (data: any) => {
+    setDataRequest({
+      ...dataRequest,
+    })
   }
 
 
   return (
     <>
-      <FormDataRequest  emitDataRequest={handleDataRequest}/>
+      <FormDataRequest  emitDataRequest={handlerDataRequest}/>
       <div className="my-4">
       <Table title={'Itens para solicitação de compra'} headerItems={headers}>
         {itemsRequest ? itemsRequest?.map((itemsRequest: any, index: any) => (
@@ -88,7 +111,10 @@ export const InsertPurchaseRequestCase = () => {
         ): null}
       </Table>
       </div>
-      <FormSetItemsRequest emitObject={(ev) => handleAddItem(ev)} />
+      <FormSetItemsRequest emitObject={(ev) => handlerAddItem(ev)} />
+      <div className="mt-4">
+        <Button className="bg-green-500" icon={'mdi:cube-send'} type="button" label={'Inserir solicitação de compra'} onClick={() => console.log(dataRequest)} />
+      </div>
     </>
   )
 }
