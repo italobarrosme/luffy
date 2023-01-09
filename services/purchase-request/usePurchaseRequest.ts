@@ -27,6 +27,13 @@ export const postPurchaseRequestsCancel = async (id: any) => {
   })
 }
 
+export const postPurchaseRequestsSubmit = async () => {
+  return await fetch({
+    method: "POST",
+    path: `/api/purchase-request/submit`
+  })
+}
+
 export const getEmployees = async () => {
   return await fetch({
     method: "GET",

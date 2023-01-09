@@ -49,10 +49,15 @@ export const InsertPurchaseRequestCase = () => {
     console.log(data, 'DATA')
   }
 
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    alert(`The name you entered was: `)
+  }
+
 
   return (
     <>
-      <FormDataRequest  emitDataRequest={handleDataRequest}/>
+      <FormDataRequest onSubmit={handleSubmit} />
       <div className="my-4">
       <Table title={'Itens para solicitação de compra'} headerItems={headers}>
         {itemsRequest ? itemsRequest?.map((itemsRequest: any, index: any) => (
@@ -89,6 +94,9 @@ export const InsertPurchaseRequestCase = () => {
       </Table>
       </div>
       <FormSetItemsRequest emitObject={(ev) => handleAddItem(ev)} />
+      <div>
+        <button type="submit" className='flex flex-col bg-brand-primary p-4 rounded-lg gap-4 text-white'>Enviar</button>
+      </div>
     </>
   )
 }
