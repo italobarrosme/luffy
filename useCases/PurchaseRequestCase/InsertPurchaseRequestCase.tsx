@@ -5,31 +5,6 @@ import { FormSetItemsRequest } from "../FormSetItemsRequest"
 import { FormDataRequest } from "../FormDataRequest"
 
 export const InsertPurchaseRequestCase = () => {
-
-  
-
-  // const POST_INSERT_PURCHASEREQUESTS = () => {
-    // getPurchaseRequests().then((response) => {
-    //  
-    //   return response
-    // }).catch((error) => {
-    //   const { status: responseStatus, statusText } = error.response
-
-    //   addToast({
-    //     type: 'error',
-    //     title: `Error ${responseStatus}`,
-    //     message: `Erro ao buscar solicitações de compra, ${statusText}`,
-    //     duration: 8000
-    //   })
-
-    //   useNoAuthorized(responseStatus)
-    // })
-    
-  // }
-
-  // useEffect(() => {
-  // }, [])
-
   
   const [itemsRequest, setItemsRequest] = useState<any>([])
 

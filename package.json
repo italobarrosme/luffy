@@ -28,6 +28,7 @@
   },
   "devDependencies": {
     "@iconify/react": "^3.2.2",
+    "@next/eslint-plugin-next": "^13.1.1",
     "@typescript-eslint/eslint-plugin": "^5.48.0",
     "autoprefixer": "^10.4.13",
     "postcss": "^8.4.20",
