@@ -184,6 +184,8 @@ export const FormDataRequest = ({emitDataRequest}:FormDataRequestProps) => {
   }
 
   const handlerRequriedDate = (event: any) => {
+
+    console.log(event.target.value, 'VALUE')
     setDocumentData({
       ...documentData,
       RequiredDate: event.target.value
@@ -221,6 +223,18 @@ export const FormDataRequest = ({emitDataRequest}:FormDataRequestProps) => {
   }, [documentData])
 
   useEffect(() => {
+    setDocumentData({
+      ...documentData,
+      DocDate: docDate,
+      DocDueDate: docDueDate,
+      TaxDate: taxDate,
+      RequriedDate: requriedDate
+    })
+
+    console.log(documentData)
+  }, [docDate, docDueDate, taxDate, requriedDate])
+
+  useEffect(() => {
     setDateNow()
     GET_EMPLOYEES()
     GET_AFFILIATE()
@@ -244,7 +258,7 @@ export const FormDataRequest = ({emitDataRequest}:FormDataRequestProps) => {
             <InputDate label="Data do Documento" name={'DocDate'}  value={docDate}  onChange={(ev) => handlerDocDate(ev)}  />
           </div>
           <div className="flex items-center gap-4">
-          <InputDate label="Data Necessaria" name={'RequriedDate'} defaultValue={requriedDate} onChange={(ev) => handlerRequriedDate(ev)}  />
+          <InputDate label="Data Necessaria" name={'RequriedDate'} value={requriedDate} onChange={(ev) => handlerRequriedDate(ev)}  />
           </div>
           <div className="flex items-center gap-4">
           <InputText label="Observações" name={'Comments'} defaultValue={''} onChange={(ev) => handlerComments(ev)} />

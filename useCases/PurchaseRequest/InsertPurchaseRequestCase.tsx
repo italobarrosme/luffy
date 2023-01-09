@@ -4,6 +4,7 @@ import { Table } from "@/useComponents/Table"
 import { FormSetItemsRequest } from "../FormSetItemsRequest"
 import { FormDataRequest } from "../FormDataRequest"
 import { Button } from "@/usePieces/Button"
+import { postPurchaseRequests } from "@/services/purchase-request/usePurchaseRequest"
 
 export const InsertPurchaseRequestCase = () => {
   
@@ -20,6 +21,16 @@ export const InsertPurchaseRequestCase = () => {
     DocumentLines: [
     ]
   })
+
+  const POST_PURCHASE_REQUEST = (data: any) => {
+    postPurchaseRequests(data).then((res) => {
+      console.log(res)
+    }).catch((err) => {
+      console.log(err)
+    }).finally(() => {
+      console.log('finalizado')
+    })
+  }
 
   const headers = [
     {
@@ -56,22 +67,37 @@ export const InsertPurchaseRequestCase = () => {
     setItemsRequest([...itemsRequest, item])
 
 
-    console.log('hereeeee')
     setDataRequest({
       ...dataRequest,
       DocumentLines: [...dataRequest.DocumentLines, {
         ItemCode: item.Item.ItemCode,
-        ShipDate: dataRequest.DocDate,
+        ShipDate: dataRequest?.DocDate,
+        Quantity: item.Quantity,
+        CostingCode: item.CostingCode,
+        CostingCode2: item.CostingCode2,
+        ProjectCode: item.ProjectCode,
       }]
     })
   }
 
   const handlerDataRequest = (data: any) => {
-    setDataRequest({
-      ...dataRequest,
-    })
+    if (data) {
+      setDataRequest({
+        ...dataRequest,
+        DocDate: data.DocDate,
+        DocDueDate: data.DocDueDate,
+        TaxDate: data.TaxDate,
+        Comments: data.Comments,
+        BPL_IDAssignedToInvoice: data.BPL_IDAssignedToInvoice,
+        RequriedDate: data.RequriedDate,
+        Resquester: data.EmployeeID,
+      })
+    }
   }
 
+  const handlerPostPurchaseRequest = (data: any) => {
+    POST_PURCHASE_REQUEST(data)
+  }
 
   return (
     <>
@@ -113,7 +139,7 @@ export const InsertPurchaseRequestCase = () => {
       </div>
       <FormSetItemsRequest emitObject={(ev) => handlerAddItem(ev)} />
       <div className="mt-4">
-        <Button className="bg-green-500" icon={'mdi:cube-send'} type="button" label={'Inserir solicitação de compra'} onClick={() => console.log(dataRequest)} />
+        <Button className="bg-green-500" icon={'mdi:cube-send'} type="button" label={'Inserir solicitação de compra'} onClick={() => handlerPostPurchaseRequest(dataRequest)} />
       </div>
     </>
   )

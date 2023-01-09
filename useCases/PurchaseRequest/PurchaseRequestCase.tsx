@@ -68,12 +68,12 @@ export const PurchaseRequestCase = () => {
         GET_PURCHASEREQUESTS()
       }
     }).catch((error) => {
-      const { status: responseStatus, statusText } = error.response
+      const { status: responseStatus, data  } = error.response
 
       addToast({
         type: 'error',
         title: `Error ${responseStatus}`,
-        message: `Erro ao cancelar solicitação de compra, ${statusText}`,
+        message: `Erro ao cancelar solicitação de compra, ${data?.error?.message}`,
         duration: 8000
       })
 
