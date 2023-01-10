@@ -6,7 +6,7 @@ import { Button } from '@/usePieces/Button'
 
 export type itemsHeader = {
   title: string
-  fn: () => void
+  fn?: () => void
 }
 
 export type TableProps = {
@@ -36,7 +36,7 @@ export const Table = ({title, headerItems, children, onChangeSearch, actionHeadB
                 <th key={item.title} className="p-3 font-semibold text-left">
                   <p className='flex items-center gap-1'>
                   {item.title}
-                  {item.title && <span>
+                  {item.fn && <span>
                     <button onClick={item.fn}>
                       <Icon icon='ic:baseline-expand-more' width={18} />
                     </button>

@@ -250,7 +250,7 @@ export const FormDataRequest = ({emitDataRequest}:FormDataRequestProps) => {
           <div className="flex items-center gap-4">
             <SelectInput label="Solicitante" name={'requesterName'} options={employees} onChange={(ev) => handlerEmployees(ev)}  />
             <InputText label="Departamento" name={'requesterDepertment'} value={department.label} readOnly />
-            <SelectInput label="Filial" name={'affiliate'} options={affiliates} onChange={(ev) => handlerAffiliates(ev)} />
+            <SelectInput label="Filial" name={'affiliate'} className="w-144" options={affiliates} onChange={(ev) => handlerAffiliates(ev)} />
           </div>
           <div className="flex items-center gap-4">
             <InputDate label="Data de Lançamento" name={'TaxDate'} value={taxDate} onChange={(ev) => handlerTaxDate(ev)} />

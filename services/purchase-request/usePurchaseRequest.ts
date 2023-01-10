@@ -1,9 +1,13 @@
 import { fetch } from "../axios";
 
-export const getPurchaseRequests = async () => {
+export const getPurchaseRequests = async (skip: any, orderby: any) => {
   return await fetch({
     method: "GET",
-    path: `/api/purchase-request`
+    path: `/api/purchase-request`,
+    params: {
+      skip,
+      orderby
+    }
   })
 }
 

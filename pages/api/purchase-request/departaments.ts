@@ -13,9 +13,11 @@ export default function handler(
       headers: {
         Cookie: `B1SESSION=${req.cookies['B1SESSION']}`
       }
+    }).catch((error) => {
+      return res.status(error.response.status).json(error.response.data)
     })
-  
-    return res.json(response.data)
+
+    return res.status(200).json(response?.data)
 }
   
   const { id } = req.query

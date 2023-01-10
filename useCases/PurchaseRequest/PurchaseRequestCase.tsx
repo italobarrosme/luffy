@@ -18,10 +18,16 @@ export const PurchaseRequestCase = () => {
   const { setLoading } = useStoreLoading()
   const [currentPage, setCurrentPage] = useState(1)
   const [purchaseRequests, setPurchaseRequests] = useState<any>([])
+  const [isPagination, setIsPagination] = useState(false)
+  const [orderby, setOrderby] = useState('DocEntry asc')
 
-  const GET_PURCHASEREQUESTS = () => {
-    getPurchaseRequests().then((response) => {
+  const GET_PURCHASEREQUESTS = ({
+    skip,
+    orderby
+  }: any) => {
+    getPurchaseRequests(skip, orderby).then((response) => {
       setLoading(true)
+
       const adpterPurchaseRequests = response.data.value.map((purchaseRequest: any) => {
         return {
           cancelled: purchaseRequest?.Cancelled,
@@ -34,6 +40,12 @@ export const PurchaseRequestCase = () => {
       })
 
       setPurchaseRequests(adpterPurchaseRequests)
+
+      if (!!!response.data['@odata.nextLink']) {
+        setIsPagination(true)
+      } else {
+        setIsPagination(false)
+      }
       
       return response
     }).catch((error) => {
@@ -57,7 +69,7 @@ export const PurchaseRequestCase = () => {
     postPurchaseRequestsCancel(docentry).then((response) => {
       setLoading(true)
 
-      if (response.status === 204) {
+      if (response.status === 200) {
         addToast({
           type: 'success',
           title: `Solicitação de compra`,
@@ -65,7 +77,7 @@ export const PurchaseRequestCase = () => {
           duration: 8000
         })
   
-        GET_PURCHASEREQUESTS()
+        handleCurrentPage(1)
       }
     }).catch((error) => {
       const { status: responseStatus, data  } = error.response
@@ -86,42 +98,77 @@ export const PurchaseRequestCase = () => {
   const headers = [
     {
       title: 'N° documento',
-      fn: () => console.log('N° documento')
+      fn: () => {
+        setOrderby('DocNum desc')
+
+        handleCurrentPage(1)
+      }
     },
     {
       title: 'Responsável',
-      fn: () => console.log('Responsável')
+      fn: () => {
+        setOrderby('RequesterName asc')
+        
+        handleCurrentPage(1)
+      }
     },
     {
       title: 'Departamento',
-      fn: () => console.log('Departamento')
+      fn: () => {
+        setOrderby('RequesterDepartment desc')
+
+        handleCurrentPage(1)
+      }
     },
     {
       title: 'Assunto',
-      fn: () => console.log('Assunto')
     },
     {
       title: 'Status',
-      fn: () => console.log('Status')
     },
     {
       title: 'Cancelado',
-      fn: () => console.log('Cancelado')
+      fn: () => {
+        setOrderby('Cancelled desc')
+
+        handleCurrentPage(1)
+      }
     },
     {
       title: 'Ações',
-      fn: () => console.log('Cancelado')
+      fn: () => {
+        setOrderby('DocEntry asc')
+
+        handleCurrentPage(1)
+      }
     },
   ]
 
 
   useEffect(() => {
-    GET_PURCHASEREQUESTS()
+    GET_PURCHASEREQUESTS({
+      skip: 0,
+      orderby: orderby
+    })
     
-  }, [])
+  }, [orderby])
 
   const handleCurrentPage = (currentPage: number) => {
     setCurrentPage(currentPage)
+
+    if (currentPage === 1) {
+      GET_PURCHASEREQUESTS({
+        skip: 0,
+        orderby: orderby
+      })
+    }
+
+    if (currentPage > 1) {
+      GET_PURCHASEREQUESTS({
+        skip: (currentPage - 1) * 10,
+        orderby: orderby
+      })
+    }
   }
 
   const onChangeSearch = (event: any) => {
@@ -136,7 +183,7 @@ export const PurchaseRequestCase = () => {
     }
 
     if (!value) {
-      GET_PURCHASEREQUESTS()
+      handleCurrentPage(1)
     }
   }
 
@@ -193,7 +240,7 @@ export const PurchaseRequestCase = () => {
           </tr>
         ): null}
       </Table>
-      <Pagination currentPage={currentPage} totalPages={10} onChangePage={handleCurrentPage} />
+      <Pagination isNextPage={isPagination} currentPage={currentPage} totalPages={10} onChangePage={handleCurrentPage} />
     </>
   )
 }

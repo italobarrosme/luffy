@@ -6,16 +6,22 @@ export default function handler(
   req: NextApiRequest,
   res: NextApiResponse<any>,
 ) {
-  const PurchaseRequestsFetch = async () => {
+  const PurchaseRequestsFetch = async (skip: any, orderby: any) => {
     const response = await fetch({
-      path: '/PurchaseRequests?$select=DocEntry,DocNum,Cancelled,DocumentStatus,RequesterName,RequesterDepartment,Comments',
+      path: `/PurchaseRequests?%24select=DocEntry,DocNum,Cancelled,DocumentStatus,RequesterName,RequesterDepartment,Comments&$skip=${skip}&$orderby=${orderby}`,
       headers: {
         Cookie: `B1SESSION=${req.cookies['B1SESSION']}`
       }
+    }).catch((error) => {
+      return res.status(error.response.status).json(error.response.data)
     })
+
+    return res.status(200).json(response?.data)
     
   
-  return res.json(response.data)
+  
 }
-  return PurchaseRequestsFetch()
+const { skip, orderby } = req.query
+
+  return PurchaseRequestsFetch(skip, orderby)
 }

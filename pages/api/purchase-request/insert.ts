@@ -14,12 +14,11 @@ export default function handler(
       },
       method: "POST",
       data
+    }).catch((error) => {
+      return res.status(error.response.status).json(error.response.data)
     })
-    try {
-      return res.status(200).json(response.data)
-    } catch (error) {
-      return res.status(400).json({ error })
-    }
+
+    return res.status(200).json(response?.data)
 
 } 
   const { body } = req

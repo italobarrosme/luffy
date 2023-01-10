@@ -16,7 +16,7 @@ export default function handler(
       return res.status(error.response.status).json(error.response.data)
     })
     
-    return res.status(200).json(response)
+    return res.status(200).json(response?.data)
 
 }
   const { id } = req.query

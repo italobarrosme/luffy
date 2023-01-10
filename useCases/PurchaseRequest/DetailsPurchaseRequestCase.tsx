@@ -67,14 +67,6 @@ export const DetailsPurchaseRequestCase = () => {
       fn: () => console.log('Quantidade')
     },
     {
-      title: 'Centro de Custo 1',
-      fn: () => console.log('Cancelado')
-    },
-    {
-      title: 'Centro de Custo 2',
-      fn: () => console.log('Cancelado')
-    },
-    {
       title: 'Projeto',
       fn: () => console.log('Projeto')
     },
@@ -105,7 +97,6 @@ export const DetailsPurchaseRequestCase = () => {
 
       }
       
-
       setDetailsPurchaseRequest(adpterPurchaseRequestsDetails)
 
       GET_DEPARTMENT(response.data?.RequesterDepartment)
@@ -127,10 +118,6 @@ export const DetailsPurchaseRequestCase = () => {
     })
   }
 
-  
-  
-  
-
   useEffect(() => {
     if (id) {
       GET_PURCHASE_REQUEST_DETAILS(id)
@@ -150,7 +137,7 @@ export const DetailsPurchaseRequestCase = () => {
           <div className="flex items-center gap-4">
             <InputText label="Solicitante" name={'requesterName'} value={detailsPurchaseRequest.requesterName} readOnly   />
             <InputText label="Departamento" name={'departament'} value={department?.label} readOnly />
-            <InputText label="Filial" name={'fileia'} value={detailsPurchaseRequest.affiliate} readOnly />
+            <InputText label="Filial" className="w-144" name={'fileia'} value={detailsPurchaseRequest.affiliate} readOnly />
           </div>
           <div className="flex items-center gap-4">
             <InputDate label="Data de Lançamento" name={'TaxDate'} value={filterData(detailsPurchaseRequest.taxDate)} readOnly/>
@@ -180,12 +167,12 @@ export const DetailsPurchaseRequestCase = () => {
               <td className="p-3 text-left">
                 {itemsRequest.Quantity}
               </td>
-              <td className="p-3 text-left">
+              {/* <td className="p-3 text-left">
                 {itemsRequest.CostingCode}
               </td>
               <td className="p-3 text-left">
                 {itemsRequest.CostingCode2}
-              </td>
+              </td> */}
               <td className="p-3 text-left">
                 {itemsRequest.ProjectCode}
               </td>

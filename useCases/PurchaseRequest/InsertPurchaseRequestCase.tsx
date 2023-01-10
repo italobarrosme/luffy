@@ -5,8 +5,13 @@ import { FormSetItemsRequest } from "../FormSetItemsRequest"
 import { FormDataRequest } from "../FormDataRequest"
 import { Button } from "@/usePieces/Button"
 import { postPurchaseRequests } from "@/services/purchase-request/usePurchaseRequest"
+import { useStoreListToast } from "@/store/useStoreListToast"
+import { useStoreLoading } from "@/store/useStoreLoading"
 
 export const InsertPurchaseRequestCase = () => {
+
+  const { addToast } = useStoreListToast()
+  const { setLoading } = useStoreLoading()
   
   const [itemsRequest, setItemsRequest] = useState<any>([])
 
@@ -24,11 +29,27 @@ export const InsertPurchaseRequestCase = () => {
 
   const POST_PURCHASE_REQUEST = (data: any) => {
     postPurchaseRequests(data).then((res) => {
-      console.log(res)
+      setLoading(true)
+      
+
+      if(res.status === 200) {
+        addToast({
+          title: 'Sucesso',
+          message: 'Solicitação de compra inserida com sucesso',
+          duration: 8000,
+          type: 'success'
+        })
+      }
+
     }).catch((err) => {
-      console.log(err)
+      addToast({
+        title: 'Erro',
+        message: 'Erro ao inserir solicitação de compra',
+        duration: 8000,
+        type: 'error'
+      })
     }).finally(() => {
-      console.log('finalizado')
+      setLoading(false)
     })
   }
 
@@ -49,14 +70,14 @@ export const InsertPurchaseRequestCase = () => {
       title: 'Quantidade',
       fn: () => console.log('Quantidade')
     },
-    {
-      title: 'Centro de Custo 1',
-      fn: () => console.log('Cancelado')
-    },
-    {
-      title: 'Centro de Custo 2',
-      fn: () => console.log('Cancelado')
-    },
+    // {
+    //   title: 'Centro de Custo 1',
+    //   fn: () => console.log('Cancelado')
+    // },
+    // {
+    //   title: 'Centro de Custo 2',
+    //   fn: () => console.log('Cancelado')
+    // },
     {
       title: 'Projeto',
       fn: () => console.log('Projeto')
@@ -118,12 +139,12 @@ export const InsertPurchaseRequestCase = () => {
             <td className="p-3 text-left">
               {itemsRequest.Quantity}
             </td>
-            <td className="p-3 text-left">
+            {/* <td className="p-3 text-left">
               {itemsRequest.CostingCode}
             </td>
             <td className="p-3 text-left">
               {itemsRequest.CostingCode2}
-            </td>
+            </td> */}
             <td className="p-3 text-left">
               {itemsRequest.ProjectCode}
             </td>

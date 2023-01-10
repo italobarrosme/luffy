@@ -9,7 +9,7 @@ import { useSession } from "next-auth/react";
 const Auth: NextPage = () => {
 
   const { addToast } = useStoreListToast();
-  const { data: session, status } = useSession();
+  const { status } = useSession();
 
   const router = useRouter();
   const query = router.query;

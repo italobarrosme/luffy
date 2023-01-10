@@ -5,9 +5,11 @@ export type PaginationProps = {
   currentPage: number
   totalPages: number
   onChangePage: (page: number) => void
+  isNextPage?: boolean
+  isPreviousPage?: boolean
 }
 
-export const Pagination = ({currentPage, totalPages, onChangePage}: PaginationProps) => {
+export const Pagination = ({currentPage, totalPages, onChangePage, isNextPage, isPreviousPage }: PaginationProps) => {
 
   const [page, setPage] = useState(currentPage)
 
@@ -32,7 +34,7 @@ export const Pagination = ({currentPage, totalPages, onChangePage}: PaginationPr
   return (
     <div className="w-full p-2 mx-auto sm:p-4">
       <nav aria-label="Pagination" className="inline-flex -space-x-px rounded-md shadow-sm border-gray-200 bg-gray-300">
-        <button onClick={handlePreviousPage} type="button" className="inline-flex items-center px-2 py-2 text-sm font-semibold border rounded-l-md bg-brand-primary hover:bg-brand-secondary text-brand-light">
+        <button disabled={currentPage <= 1 ? !isPreviousPage : isPreviousPage } onClick={handlePreviousPage} type="button" className="inline-flex items-center px-2 py-2 text-sm font-semibold border rounded-l-md bg-brand-primary hover:bg-brand-secondary text-brand-light disabled:bg-gray-500">
           <span className="sr-only">Anterior</span>
           <Icon icon="ic:baseline-keyboard-arrow-left" width={32}/>
         </button>
@@ -40,7 +42,7 @@ export const Pagination = ({currentPage, totalPages, onChangePage}: PaginationPr
           Pagina Atual {currentPage}
         </button>
 
-        <button onClick={handleNextPage} type="button" className="inline-flex items-center px-2 py-2 text-sm font-semibold border rounded-r-md bg-brand-primary hover:bg-brand-secondary text-brand-light">
+        <button disabled={isNextPage} onClick={handleNextPage} type="button" className="inline-flex items-center px-2 py-2 text-sm font-semibold border rounded-r-md bg-brand-primary hover:bg-brand-secondary text-brand-light disabled:bg-gray-500">
           <span className="sr-only">Proximo</span>
           <Icon icon="ic:baseline-keyboard-arrow-right" width={32}/>
         </button>
