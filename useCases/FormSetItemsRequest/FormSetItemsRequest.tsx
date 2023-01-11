@@ -20,8 +20,8 @@ export const FormSetItemsRequest = ({emitObject}:FormSetItemsRequestProps) => {
   const [project, setProject] = useState<any>([])
 
   const [DocumentLines, setDocumentLines] = useState<any>([])
-  // const [profitCenter1, setProfitCenter1] = useState<any>([])
-  // const [profitCenter2, setProfitCenter2] = useState<any>([])
+  const [profitCenter1, setProfitCenter1] = useState<any>([])
+  const [profitCenter2, setProfitCenter2] = useState<any>([])
 
   const { setLoading, store } = useStoreLoading()
 
@@ -34,44 +34,44 @@ export const FormSetItemsRequest = ({emitObject}:FormSetItemsRequestProps) => {
 
   const { setModal } = useStoreModal()
 
-  // const GET_PROFITCENTER = () => {
-  //   getProfitCenters().then((response) => {
-  //     setLoading(true)
-  //     const { data } = response
+  const GET_PROFITCENTER = () => {
+    getProfitCenters().then((response) => {
+      setLoading(true)
+      const { data } = response
       
       
-  //     const profitCenters = data.value.map((profitCenter: any) => {
-  //       return {
-  //         value: profitCenter.CenterCode,
-  //         label: profitCenter.CenterName
-  //       }
-  //     })
+      const profitCenters = data.value.map((profitCenter: any) => {
+        return {
+          value: profitCenter.CenterCode,
+          label: profitCenter.CenterName
+        }
+      })
 
-  //     setProfitCenter1([{
-  //       value: '',
-  //       label: 'Selecione um centro de custo'
-  //     },...profitCenters])
-  //     setProfitCenter2([{
-  //       value: '',
-  //       label: 'Selecione um centro de custo'
-  //     },...profitCenters])
+      setProfitCenter1([{
+        value: '',
+        label: 'Selecione um centro de custo'
+      },...profitCenters])
+      setProfitCenter2([{
+        value: '',
+        label: 'Selecione um centro de custo'
+      },...profitCenters])
       
-  //     return response
-  //   }).catch((error) => {
-  //     const { status: responseStatus, statusText } = error.response
+      return response
+    }).catch((error) => {
+      const { status: responseStatus, statusText } = error.response
 
-  //     addToast({
-  //       type: 'error',
-  //       title: 'Erro ao buscar projetos',
-  //       message: `Erro ao buscar projetos, ${statusText}`,
-  //       duration: 8000
-  //     })
+      addToast({
+        type: 'error',
+        title: 'Erro ao buscar projetos',
+        message: `Erro ao buscar projetos, ${statusText}`,
+        duration: 8000
+      })
 
-  //     useNoAuthorized(responseStatus)
-  //   }).finally(() => {
-  //     setLoading(false)
-  //   })
-  // }
+      useNoAuthorized(responseStatus)
+    }).finally(() => {
+      setLoading(false)
+    })
+  }
 
   const GET_PROJECT = () => {
     getProjects().then((response) => {
@@ -91,12 +91,12 @@ export const FormSetItemsRequest = ({emitObject}:FormSetItemsRequestProps) => {
       
       return response
     }).catch((error) => {
-      const { status: responseStatus, statusText } = error.response
+      const { status: responseStatus, data } = error.response
 
       addToast({
         type: 'error',
         title: 'Erro ao buscar projetos',
-        message: `Erro ao buscar projetos, ${statusText}`,
+        message: `Erro ao buscar projetos, ${data?.error.message}`,
         duration: 8000
       })
 
@@ -108,7 +108,7 @@ export const FormSetItemsRequest = ({emitObject}:FormSetItemsRequestProps) => {
 
   useEffect(() => {
     GET_PROJECT()
-    // GET_PROFITCENTER()
+    GET_PROFITCENTER()
 
     handlerItem()
   }, [item])
@@ -202,8 +202,8 @@ export const FormSetItemsRequest = ({emitObject}:FormSetItemsRequestProps) => {
             </div>
             <div className="flex items-center gap-4">
               <InputText className="w-36" type="number" label="Quantidade" name={'Quantity'} defaultValue={''} onChange={handlerQuantity} />
-              {/* <SelectInput label="Centro de custo 1" name={'CostingCode'} options={profitCenter1} onChange={(ev) => handlerProfitCenter1(ev)} />
-              <SelectInput label="Centro de custo 2" name={'CostingCode2'} options={profitCenter2} onChange={(ev) => handlerProfitCenter2(ev)} /> */}
+              <SelectInput label="Centro de custo 1" name={'CostingCode'} options={profitCenter1} onChange={(ev) => handlerProfitCenter1(ev)} />
+              <SelectInput label="Centro de custo 2" name={'CostingCode2'} options={profitCenter2} onChange={(ev) => handlerProfitCenter2(ev)} />
               <SelectInput label="Projeto" name={'ProjectCode'} options={project} onChange={(ev) => handlerProject(ev)} />
             </div>
             <div className="flex items-center gap-4 my-4">

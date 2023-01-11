@@ -3,6 +3,7 @@ import { ReactNode } from 'react'
 import { InputSearch } from "@/usePieces/InputSearch"
 import { ChangeEvent } from 'react'
 import { Button } from '@/usePieces/Button'
+import clsx from 'clsx'
 
 export type itemsHeader = {
   title: string
@@ -35,12 +36,12 @@ export const Table = ({title, headerItems, children, onChangeSearch, actionHeadB
               {headerItems?.map((item) => (
                 <th key={item.title} className="p-3 font-semibold text-left">
                   <p className='flex items-center gap-1'>
-                  {item.title}
-                  {item.fn && <span>
+                  
+                  
                     <button onClick={item.fn}>
-                      <Icon icon='ic:baseline-expand-more' width={18} />
+                    <span className={clsx(item.fn ? 'underline' : '')}>{item.title}</span> {item.fn && <span>{/* <Icon icon='ic:baseline-expand-more' width={18} /> */} </span>}
                     </button>
-                  </span>}
+                  
                   </p>
                 </th>
               ))}

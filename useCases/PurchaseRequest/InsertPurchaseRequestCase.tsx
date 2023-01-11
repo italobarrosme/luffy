@@ -41,10 +41,12 @@ export const InsertPurchaseRequestCase = () => {
         })
       }
 
-    }).catch((err) => {
+    }).catch((error) => {
+      const { status: responseStatus, data } = error.response
+
       addToast({
-        title: 'Erro',
-        message: 'Erro ao inserir solicitação de compra',
+        title: `Erro ${responseStatus} `,
+        message: `Erro ao inserir solicitação de compra ${data?.error.message}`,
         duration: 8000,
         type: 'error'
       })
@@ -70,14 +72,14 @@ export const InsertPurchaseRequestCase = () => {
       title: 'Quantidade',
       fn: () => console.log('Quantidade')
     },
-    // {
-    //   title: 'Centro de Custo 1',
-    //   fn: () => console.log('Cancelado')
-    // },
-    // {
-    //   title: 'Centro de Custo 2',
-    //   fn: () => console.log('Cancelado')
-    // },
+    {
+      title: 'Centro de Custo 1',
+      fn: () => console.log('Cancelado')
+    },
+    {
+      title: 'Centro de Custo 2',
+      fn: () => console.log('Cancelado')
+    },
     {
       title: 'Projeto',
       fn: () => console.log('Projeto')
@@ -139,12 +141,12 @@ export const InsertPurchaseRequestCase = () => {
             <td className="p-3 text-left">
               {itemsRequest.Quantity}
             </td>
-            {/* <td className="p-3 text-left">
+            <td className="p-3 text-left">
               {itemsRequest.CostingCode}
             </td>
             <td className="p-3 text-left">
               {itemsRequest.CostingCode2}
-            </td> */}
+            </td>
             <td className="p-3 text-left">
               {itemsRequest.ProjectCode}
             </td>

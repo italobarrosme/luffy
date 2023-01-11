@@ -23,8 +23,8 @@ export const SearchItems = ({emitItem}: SearchItemsProps) => {
       const { status: responseStatus, statusText } = error.response
       addToast({
         type: 'error',
-        title: 'Erro ao buscar itens',
-        message: `Erro ${responseStatus}: ${statusText}`,
+        title: `Erro ${responseStatus}`,
+        message: `Erro  ao buscar itens${statusText}`,
         duration: 8000
       })
     })

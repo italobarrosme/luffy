@@ -67,6 +67,14 @@ export const DetailsPurchaseRequestCase = () => {
       fn: () => console.log('Quantidade')
     },
     {
+      title: 'Centro de Custo 1',
+      fn: () => console.log('Cancelado')
+    },
+    {
+      title: 'Centro de Custo 2',
+      fn: () => console.log('Cancelado')
+    },
+    {
       title: 'Projeto',
       fn: () => console.log('Projeto')
     },
@@ -103,12 +111,12 @@ export const DetailsPurchaseRequestCase = () => {
       
       return response
     }).catch((error) => {
-      const { status: responseStatus, statusText } = error.response
+      const { status: responseStatus, data } = error.response
 
       addToast({
         type: 'error',
         title: `Error ${responseStatus}`,
-        message: `Erro ao buscar solicitações de compra, ${statusText}`,
+        message: `Erro ao buscar solicitações de compra, ${data?.error?.message}`,
         duration: 8000
       })
 
@@ -167,12 +175,12 @@ export const DetailsPurchaseRequestCase = () => {
               <td className="p-3 text-left">
                 {itemsRequest.Quantity}
               </td>
-              {/* <td className="p-3 text-left">
+              <td className="p-3 text-left">
                 {itemsRequest.CostingCode}
               </td>
               <td className="p-3 text-left">
                 {itemsRequest.CostingCode2}
-              </td> */}
+              </td>
               <td className="p-3 text-left">
                 {itemsRequest.ProjectCode}
               </td>
