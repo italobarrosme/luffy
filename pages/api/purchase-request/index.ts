@@ -7,19 +7,20 @@ export default function handler(
   res: NextApiResponse<any>,
 ) {
   const PurchaseRequestsFetch = async (skip: any, orderby: any, filter?: any) => {
-    
     const path = `/PurchaseRequests?%24select=DocEntry,DocNum,Cancelled,DocumentStatus,RequesterName,RequesterDepartment,Comments&$skip=${skip}&$orderby=${orderby}` + (filter ? `&$filter=${filter}` : '')
 
-    const response = await fetch({
+    await fetch({
       path,
       headers: {
         Cookie: `B1SESSION=${req.cookies['B1SESSION']}`
       }
+    }).then((response) => {
+      return res.status(200).json(response?.data)
     }).catch((error) => {
       return res.status(error.response.status).json(error.response.data)
     })
 
-    return res.status(200).json(response?.data)
+    
     
   
   

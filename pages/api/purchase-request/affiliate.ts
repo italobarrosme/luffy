@@ -7,16 +7,16 @@ export default function handler(
   res: NextApiResponse<any>,
 ) {
   const AffiliateFetch = async () => {
-    const response = await fetch({
+    await fetch({
       path: '/BusinessPlaces?$select=BPLID,BPLName',
       headers: {
         Cookie: `B1SESSION=${req.cookies['B1SESSION']}`
       }
+    }).then((response) => {
+      return res.status(200).json(response?.data)
     }).catch((error) => {
       return res.status(error.response.status).json(error.response.data)
     })
-
-    return res.status(200).json(response?.data)
 }
   return AffiliateFetch()
 }

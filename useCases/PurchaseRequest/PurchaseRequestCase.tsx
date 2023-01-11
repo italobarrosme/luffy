@@ -22,7 +22,7 @@ export const PurchaseRequestCase = () => {
   const [isPagination, setIsPagination] = useState(false)
   const [orderby, setOrderby] = useState('DocNum asc')
   const [filter, setFilter] = useState('')
-  const debouncedValue = useDebounce<string>(filter, 800)
+  const debouncedValue = useDebounce<string>(filter, 1200)
 
   const GET_PURCHASEREQUESTS = ({
     skip,
@@ -31,8 +31,6 @@ export const PurchaseRequestCase = () => {
   }: any) => {
     getPurchaseRequests(skip, orderby, filter).then((response) => {
       setLoading(true)
-
-      console.log(orderby, 'ORDERBY')
 
       const adpterPurchaseRequests = response.data.value.map((purchaseRequest: any) => {
         return {
@@ -55,12 +53,12 @@ export const PurchaseRequestCase = () => {
       
       return response
     }).catch((error) => {
-      const { status: responseStatus, statusText } = error.response
+      const { status: responseStatus, data } = error.response
 
       addToast({
         type: 'error',
         title: `Error ${responseStatus}`,
-        message: `Erro ao buscar solicitações de compra, ${statusText}`,
+        message: `Erro ao buscar solicitações de compra, ${data?.error?.message}`,
         duration: 8000
       })
 
@@ -105,11 +103,11 @@ export const PurchaseRequestCase = () => {
     {
       title: 'N° documento',
       fn: () => {
-        if (orderby === 'DocEntry asc') {
-          setOrderby('DocEntry desc')
+        if (orderby === 'DocEntry desc') {
+          setOrderby('DocEntry asc')
           
         } else {
-          setOrderby('DocEntry asc')
+          setOrderby('DocEntry desc')
           
         }
         handleCurrentPage(1)
@@ -199,28 +197,31 @@ export const PurchaseRequestCase = () => {
   }
 
   useEffect(() => {
-    console.log(currentPage, 'CURRENT DO EFFECT')
     if (currentPage > 1) {
       GET_PURCHASEREQUESTS({
         skip: (currentPage - 1) * 20,
-        orderby,
-        filter
+        orderby
       })
     } else {
       GET_PURCHASEREQUESTS({
         skip: 0,
-        orderby,
-        filter
+        orderby
       })
     }
   }, [currentPage, orderby])
 
   useEffect(() => {
+    
     if (debouncedValue) {
       GET_PURCHASEREQUESTS({
         skip: 0,
         orderby: 'DocNum asc',
         filter: `DocNum eq ${debouncedValue}`
+      })
+    } else {
+      GET_PURCHASEREQUESTS({
+        skip: 0,
+        orderby: 'DocNum asc',
       })
     }
 

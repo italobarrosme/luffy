@@ -184,8 +184,6 @@ export const FormDataRequest = ({emitDataRequest}:FormDataRequestProps) => {
   }
 
   const handlerRequriedDate = (event: any) => {
-
-    console.log(event.target.value, 'VALUE')
     setDocumentData({
       ...documentData,
       RequiredDate: event.target.value
@@ -230,8 +228,6 @@ export const FormDataRequest = ({emitDataRequest}:FormDataRequestProps) => {
       TaxDate: taxDate,
       RequriedDate: requriedDate
     })
-
-    console.log(documentData)
   }, [docDate, docDueDate, taxDate, requriedDate])
 
   useEffect(() => {
