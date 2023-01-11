@@ -6,9 +6,12 @@ export default function handler(
   req: NextApiRequest,
   res: NextApiResponse<any>,
 ) {
-  const PurchaseRequestsFetch = async (skip: any, orderby: any) => {
+  const PurchaseRequestsFetch = async (skip: any, orderby: any, filter?: any) => {
+    
+    const path = `/PurchaseRequests?%24select=DocEntry,DocNum,Cancelled,DocumentStatus,RequesterName,RequesterDepartment,Comments&$skip=${skip}&$orderby=${orderby}` + (filter ? `&$filter=${filter}` : '')
+
     const response = await fetch({
-      path: `/PurchaseRequests?%24select=DocEntry,DocNum,Cancelled,DocumentStatus,RequesterName,RequesterDepartment,Comments&$skip=${skip}&$orderby=${orderby}`,
+      path,
       headers: {
         Cookie: `B1SESSION=${req.cookies['B1SESSION']}`
       }
@@ -21,7 +24,7 @@ export default function handler(
   
   
 }
-const { skip, orderby } = req.query
+const { skip, orderby, filter } = req.query
 
-  return PurchaseRequestsFetch(skip, orderby)
+  return PurchaseRequestsFetch(skip, orderby, filter)
 }

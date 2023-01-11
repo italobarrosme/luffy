@@ -3,6 +3,7 @@ import { Table } from "@/useComponents/Table"
 import { useEffect, useState } from "react"
 import { getPurchaseRequests, postPurchaseRequestsCancel  } from "@/services/purchase-request/usePurchaseRequest"
 import { formatDepartament, formatStatus, formatCanceled } from '@/utils/formatData'
+import { useDebounce } from 'usehooks-ts'
 
 import { useNoAuthorized } from "@/hooks/useNoAuthorized"
 import { ButtonIcon } from "@/usePieces/ButtonIcon"
@@ -19,14 +20,19 @@ export const PurchaseRequestCase = () => {
   const [currentPage, setCurrentPage] = useState(1)
   const [purchaseRequests, setPurchaseRequests] = useState<any>([])
   const [isPagination, setIsPagination] = useState(false)
-  const [orderby, setOrderby] = useState('DocEntry asc')
+  const [orderby, setOrderby] = useState('DocNum asc')
+  const [filter, setFilter] = useState('')
+  const debouncedValue = useDebounce<string>(filter, 800)
 
   const GET_PURCHASEREQUESTS = ({
     skip,
-    orderby
+    orderby,
+    filter
   }: any) => {
-    getPurchaseRequests(skip, orderby).then((response) => {
+    getPurchaseRequests(skip, orderby, filter).then((response) => {
       setLoading(true)
+
+      console.log(orderby, 'ORDERBY')
 
       const adpterPurchaseRequests = response.data.value.map((purchaseRequest: any) => {
         return {
@@ -99,29 +105,54 @@ export const PurchaseRequestCase = () => {
     {
       title: 'N° documento',
       fn: () => {
-        setOrderby('DocNum desc')
-
+        if (orderby === 'DocEntry asc') {
+          setOrderby('DocEntry desc')
+          
+        } else {
+          setOrderby('DocEntry asc')
+          
+        }
         handleCurrentPage(1)
       }
     },
     {
       title: 'Responsável',
       fn: () => {
-        setOrderby('RequesterName asc')
-        
+        if (orderby === 'RequesterName asc') {
+          setOrderby('RequesterName desc')
+          
+        } else {
+          setOrderby('RequesterName asc')
+          
+        }
         handleCurrentPage(1)
       }
     },
     {
       title: 'Departamento',
       fn: () => {
-        setOrderby('RequesterDepartment desc')
+        if(orderby === 'RequesterDepartment asc') {
+          setOrderby('RequesterDepartment desc')
 
+        } else {
+          setOrderby('RequesterDepartment asc')
+
+        }
         handleCurrentPage(1)
       }
     },
     {
       title: 'Assunto',
+      fn: () => {
+        if(orderby === 'DocEntry asc') {
+          setOrderby('DocEntry desc')
+
+        } else {
+          setOrderby('DocEntry asc')
+
+        }
+        handleCurrentPage(1)
+      }
     },
     {
       title: 'Status',
@@ -129,18 +160,17 @@ export const PurchaseRequestCase = () => {
     {
       title: 'Cancelado',
       fn: () => {
-        setOrderby('Cancelled desc')
+        if (orderby === 'Cancelled asc') {
+          setOrderby('Cancelled desc')
 
+        } else {
+          setOrderby('Cancelled asc')
+        }
         handleCurrentPage(1)
       }
     },
     {
-      title: 'Ações',
-      fn: () => {
-        setOrderby('DocEntry asc')
-
-        handleCurrentPage(1)
-      }
+      title: 'Ações'
     },
   ]
 
@@ -148,44 +178,53 @@ export const PurchaseRequestCase = () => {
   useEffect(() => {
     GET_PURCHASEREQUESTS({
       skip: 0,
-      orderby: orderby
+      orderby: 'DocNum asc'
     })
     
-  }, [orderby])
+  }, [])
 
   const handleCurrentPage = (currentPage: number) => {
     setCurrentPage(currentPage)
-
-    if (currentPage === 1) {
-      GET_PURCHASEREQUESTS({
-        skip: 0,
-        orderby: orderby
-      })
-    }
-
-    if (currentPage > 1) {
-      GET_PURCHASEREQUESTS({
-        skip: (currentPage - 1) * 10,
-        orderby: orderby
-      })
-    }
   }
 
   const onChangeSearch = (event: any) => {
     const { value } = event.target
 
     if (value) {
-      const filterPurchaseRequests = purchaseRequests.filter((purchaseRequest: any) => {
-        return purchaseRequest?.docnum === Number(value)
-      })
-
-      setPurchaseRequests(filterPurchaseRequests)
+      setFilter(value)
     }
-
     if (!value) {
       handleCurrentPage(1)
     }
   }
+
+  useEffect(() => {
+    console.log(currentPage, 'CURRENT DO EFFECT')
+    if (currentPage > 1) {
+      GET_PURCHASEREQUESTS({
+        skip: (currentPage - 1) * 20,
+        orderby,
+        filter
+      })
+    } else {
+      GET_PURCHASEREQUESTS({
+        skip: 0,
+        orderby,
+        filter
+      })
+    }
+  }, [currentPage, orderby])
+
+  useEffect(() => {
+    if (debouncedValue) {
+      GET_PURCHASEREQUESTS({
+        skip: 0,
+        orderby: 'DocNum asc',
+        filter: `DocNum eq ${debouncedValue}`
+      })
+    }
+
+  }, [debouncedValue])
 
   const handleInsertPurchaseRequest = () => {
     router.push('/purchase-request/insert-purchase-request')
@@ -240,7 +279,7 @@ export const PurchaseRequestCase = () => {
           </tr>
         ): null}
       </Table>
-      <Pagination isNextPage={isPagination} currentPage={currentPage} totalPages={10} onChangePage={handleCurrentPage} />
+      <Pagination isNextPage={isPagination} currentPage={currentPage} totalPages={20} onChangePage={handleCurrentPage} />
     </>
   )
 }

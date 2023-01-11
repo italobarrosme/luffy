@@ -27,7 +27,12 @@ export const Pagination = ({currentPage, totalPages, onChangePage, isNextPage, i
 
   useEffect(() => {
     onChangePage(page)
+
   }, [page])
+
+  useEffect(() => {
+    setPage(currentPage)
+  }, [currentPage])
 
 
 
